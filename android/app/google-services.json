@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970305362077",
+    "project_id": "qaproject-351eb",
+    "storage_bucket": "qaproject-351eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970305362077:android:a5b59acdd72cb53bf09c74",
+        "android_client_info": {
+          "package_name": "login.bahi.ae"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaPG9EBidhAxjvMD3nTjneE-3VitAdmGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
