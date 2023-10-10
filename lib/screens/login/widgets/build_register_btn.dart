@@ -11,19 +11,19 @@ class BuildRegisterBtn extends StatelessWidget {
       },
       child: Container(
         margin: Dimens.paddingAll20PX,
-        child: const Column(
+        child:  Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "You dont have account ? ",
+                 Text(
+                  tr("youDontHaveAccount", context),
                   style: AppTextStyle.s14_w400(color: Colors.grey),
                 ),
                 Text(
-                  " Register now.",
-                  style: AppTextStyle.s16_w700(color:Colors.black),
+                  tr("registerNow", context),
+                  style: AppTextStyle.s16_w700(color:primaryColor),
                 ),
               ],
             ),

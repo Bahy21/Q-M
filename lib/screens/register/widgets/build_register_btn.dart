@@ -16,11 +16,11 @@ class BuildCusRegister extends StatelessWidget {
         padding: Dimens.marginH20v10,
         decoration: BoxDecoration(
             borderRadius: Dimens.borderRadius10PX,
-            color: Colors.black
+            color: primaryColor
         ),
         child: Text(
           textAlign: TextAlign.center,
-          'Sign In',
+          tr("signUp",context).toUpperCase(),
           style: TextStyle(
               color: Colors.white,
               fontSize: Dimens.font_sp14.sp

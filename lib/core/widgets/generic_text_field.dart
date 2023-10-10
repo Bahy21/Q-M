@@ -1,9 +1,8 @@
+import 'package:chatgpt_course/core/themes/custom_input_decoration.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:login_tutorial/core/bloc/device_cubit/device_cubit.dart';
-import 'package:login_tutorial/core/themes/custom_input_decoration.dart';
 
 class GenericTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -126,7 +125,7 @@ class GenericTextField extends StatelessWidget {
         padding: contentPadding,
         hintColor: hintColor,
         borderRadius: radius,
-        lang: context.watch<DeviceCubit>().state.model.locale.languageCode,
+        lang: "en"
       ),
     );
   }

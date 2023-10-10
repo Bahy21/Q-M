@@ -8,7 +8,7 @@ class AppTextStyle extends TextStyle {
 
   // ignore: non_constant_identifier_names
   const AppTextStyle.s8_w400({required Color color})
-      : super(color: color, fontSize: 8, fontWeight: FontWeight.w400, height: fontHeight,);
+      : super(color: color, fontSize: 8, fontWeight: FontWeight.w400, height: fontHeight, );
 
   // ignore: non_constant_identifier_names
   const AppTextStyle.s9_w400({required Color color})

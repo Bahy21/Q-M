@@ -1,14 +1,14 @@
+import 'package:chatgpt_course/constants/constants.dart';
+import 'package:chatgpt_course/core/constants/dimens.dart';
+import 'package:chatgpt_course/core/constants/gaps.dart';
+import 'package:chatgpt_course/core/helpers/validator.dart';
+import 'package:chatgpt_course/core/localization/localization_methods.dart';
+import 'package:chatgpt_course/core/themes/app_text_style.dart';
+import 'package:chatgpt_course/core/widgets/generic_text_field.dart';
+import 'package:chatgpt_course/res.dart';
+import 'package:chatgpt_course/screens/register/register_imports.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:login_tutorial/core/bloc/generic_cubit/generic_cubit.dart';
-import 'package:login_tutorial/core/constants/dimens.dart';
-import 'package:login_tutorial/core/constants/gaps.dart';
-import 'package:login_tutorial/core/helpers/validator.dart';
-import 'package:login_tutorial/core/themes/app_text_style.dart';
-import 'package:login_tutorial/core/widgets/generic_text_field.dart';
-import 'package:login_tutorial/features/auth/presentation/pages/register/register_imports.dart';
-import 'package:login_tutorial/res.dart';
 
 
 import '../login_imports.dart';

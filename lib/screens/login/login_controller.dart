@@ -5,8 +5,9 @@ part of 'login_imports.dart';
 class LoginController {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
-  GenericBloc<bool> passwordVisible = GenericBloc(false);
   final GlobalKey<FormState> formKey = GlobalKey();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  DateTime now = DateTime.now();
 
   Future signIn(BuildContext context) async {
     if (formKey.currentState!.validate()) {
@@ -23,52 +24,17 @@ class LoginController {
     }
   }
 
-  Future<UserCredential> signInWithGoogle(BuildContext context) async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    var data = await FirebaseAuth.instance.signInWithCredential(credential);
-    log('========= Sign in with Google ==========');
-    log(data.credential.toString());
-    log('========================================');
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Home(),));
-    return data ;
-  }
-
   void _setSignIn(BuildContext context) async {
     final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email.text,
       password: password.text,
     );
     if (credential.user != null) {
-      _successDialog(context);
       getIt<LoadingHelper>().dismissDialog();
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const Home(),
-      ));
+      handleUserPayment(context);
     }
   }
 
-  void _successDialog(BuildContext context) {
-    AwesomeDialog(
-      context: context,
-      animType: AnimType.leftSlide,
-      headerAnimationLoop: false,
-      dialogType: DialogType.success,
-      showCloseIcon: true,
-      title: 'Succes',
-      btnOkOnPress: () {
-        debugPrint('OnClcik');
-      },
-      btnOkIcon: Icons.check_circle,
-      onDismissCallback: (type) {
-        debugPrint('Dialog Dissmiss from callback $type');
-      },
-    ).show();
-  }
 
   void _handleException(BuildContext context, dynamic e) {
     if (e.code == 'weak-password') {
@@ -91,6 +57,72 @@ class LoginController {
           style: AppTextStyle.s12_w500(color: Colors.black),
         ),
       );
+    }else {
+      getIt<LoadingHelper>().dismissDialog();
     }
   }
+
+  Future<void> handleUserPayment(BuildContext context) async {
+    var user = FirebaseAuth.instance.currentUser;
+    var data = await firestore.collection("users").doc(user!.uid).get();
+    var parsedUser = UserModel.fromJson(data.data()!);
+    if (parsedUser.isPayment == true) {
+      if (parsedUser.paymentType == "week") {
+        _handleWeekPayment(parsedUser, context);
+      } else if (parsedUser.paymentType == "monthly") {
+        _handleMonthPayment(parsedUser, context);
+      } else if (parsedUser.paymentType == "yearly") {
+        _handleYearPayment(parsedUser, context);
+      }
+    }else {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Payment(),));
+    }
+  }
+  void _handleWeekPayment (UserModel user, BuildContext context){
+    if (user.paymentDate!.day == now.day - 3 ||
+        user.paymentDate!.isBefore(
+          DateTime(
+            now.year,
+            now.month,
+            now.day - 3,
+          ),
+        )) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const Payment(),
+      ));
+    }
+  }
+  void _handleMonthPayment (UserModel user, BuildContext context){
+    if (user.paymentDate!.month == now.month - 1 ||
+        user.paymentDate!.isBefore(
+          DateTime(
+            now.year,
+            now.month - 1,
+            now.day,
+          ),
+        )) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Payment(),
+      ));
+    }else {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home(),));
+    }
+  }
+  void _handleYearPayment (UserModel user, BuildContext context){
+    if (user.paymentDate!.year == now.year - 1 ||
+        user.paymentDate!.isBefore(
+          DateTime(
+            now.year - 1,
+            now.month,
+            now.day,
+          ),
+        )) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Payment(),
+      ));
+    }else{
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home(),));
+    }
+  }
+
 }

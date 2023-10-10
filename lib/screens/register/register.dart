@@ -13,9 +13,26 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: const BuildAuthAppBar(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            tr("signUp", context).toUpperCase(),
+            style: const AppTextStyle.s24_w700(color: Colors.black),
+          ),
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: const Padding(
+              padding: EdgeInsets.all(8),
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
         body: ListView(
           padding: Dimens.paddingHorizontal10PX,
           children: [
@@ -24,7 +41,7 @@ class _RegisterState extends State<Register> {
             ),
           ],
         ),
-        bottomNavigationBar:  BuildCusRegister(
+        bottomNavigationBar: BuildCusRegister(
           controller: controller,
         ),
       ),

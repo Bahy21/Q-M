@@ -30,7 +30,6 @@ class _LoginState extends State<Login> {
             const BuildLoginHeader(),
             BuildLoginForm(controller: controller),
             BuildLoginButton(controller: controller),
-            BuildSignInWithGoogle(controller: controller,),
           ],
         ),
       ),

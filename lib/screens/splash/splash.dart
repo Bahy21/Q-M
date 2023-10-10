@@ -1,6 +1,5 @@
 part of 'splash_imports.dart';
 
-@RoutePage()
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
 
@@ -26,12 +25,12 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.colors.background,
+      backgroundColor: Colors.white,
       body: Center(
         child: TextAnimator(
-          'Base Structure',
-          initialDelay: const Duration(milliseconds: 1000),
-          style: AppTextStyle.s32_w700(color: context.colors.black),
+          'Q & M',
+          initialDelay: const   Duration(milliseconds: 1000),
+          style: const TextStyle(color: Colors.black, fontWeight:FontWeight.w700, fontSize: 25),
           incomingEffect: WidgetTransitionEffects.incomingScaleDown(
             duration: const Duration(milliseconds: 600),
           ),

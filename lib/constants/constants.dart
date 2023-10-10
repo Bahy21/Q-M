@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 Color scaffoldBackgroundColor = const Color(0xFF343541);
-Color cardColor = const Color(0xFF444654);
+Color cardColor = Colors.grey.withOpacity(0.1);
+Color chatGptColor = const Color(0xFF10a37f);
+Color primaryColor = const Color(0xFF610B21);
 
 // List<String> models = [
 //   'Model1',

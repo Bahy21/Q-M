@@ -15,72 +15,46 @@ class BuildRegisterForm extends StatelessWidget {
         children: [
           Gaps.vGap20,
           GenericTextField(
-            fillColor: Colors.grey.withOpacity(0.1),
-            contentPadding: Dimens.paddingHorizontal15PX,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10 , horizontal: 10).r,
             fieldTypes: FieldTypes.normal,
             controller: controller.email,
+            focusBorderColor: cardColor,
+            fillColor: Colors.grey.withOpacity(0.1),
+            enableBorderColor: Colors.transparent,
             type: TextInputType.emailAddress,
             margin: Dimens.paddingHorizontal10PX,
-
             action: TextInputAction.next,
-            validate: (value) => value?.validateEmail(),
-            label: "Email",
+            validate: (value) => value!.validateEmail(),
+            label: tr("email", context),
           ),
           Gaps.vGap20,
-          BlocBuilder<GenericBloc<bool>, GenericState<bool>>(
-            bloc: controller.visiblePassword,
-            builder: (context, state) {
-              return GenericTextField(
-                fillColor: Colors.grey.withOpacity(0.1),
-                fieldTypes:
-                    state.data ? FieldTypes.password : FieldTypes.normal,
-                type: TextInputType.visiblePassword,
-                action: TextInputAction.done,
-                controller: controller.password,
-                validate: (value) => value!.validatePassword(),
-                contentPadding: Dimens.paddingHorizontal15PX,
-                label: "Password",
-                margin: Dimens.paddingHorizontal10PX,
-                suffixIcon: InkWell(
-                  onTap: () =>
-                      controller.visiblePassword.onUpdateData(!state.data),
-                  child: Icon(
-                    state.data
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                    color: Colors.grey,
-                  ),
-                ),
-              );
-            },
+          GenericTextField(
+            fillColor: Colors.grey.withOpacity(0.1),
+            fieldTypes:  FieldTypes.password ,
+            type: TextInputType.visiblePassword,
+            focusBorderColor: cardColor,
+            action: TextInputAction.done,
+            controller: controller.password,
+            enableBorderColor: Colors.transparent,
+            validate: (value) => value!.validatePassword(),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10 , horizontal: 10).r,
+            label: tr("password", context),
+            margin: Dimens.paddingHorizontal10PX,
           ),
           Gaps.vGap20,
-          BlocBuilder<GenericBloc<bool>, GenericState<bool>>(
-            bloc: controller.visiblePassword,
-            builder: (context, state) {
-              return GenericTextField(
-                fillColor: Colors.grey.withOpacity(0.1),
-                fieldTypes:
-                state.data ? FieldTypes.password : FieldTypes.normal,
-                type: TextInputType.visiblePassword,
-                action: TextInputAction.done,
-                validate: (value) => value!.validatePasswordConfirm(pass: controller.password.text),
-                contentPadding: Dimens.paddingHorizontal15PX,
-                controller: controller.confirmPass,
-                label: "Confirm password",
-                margin: Dimens.paddingHorizontal10PX,
-                suffixIcon: InkWell(
-                  onTap: () =>
-                      controller.visiblePassword.onUpdateData(!state.data),
-                  child: Icon(
-                    state.data
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                    color: Colors.grey,
-                  ),
-                ),
-              );
-            },
+          GenericTextField(
+            fillColor: Colors.grey.withOpacity(0.1),
+            fieldTypes: FieldTypes.password ,
+            type: TextInputType.visiblePassword,
+            action: TextInputAction.done,
+            enableBorderColor: Colors.transparent,
+            focusBorderColor: cardColor,
+            validate: (value) =>
+                value!.validatePasswordConfirm(pass: controller.password.text),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10 , horizontal: 10).r,
+            controller: controller.confirmPass,
+            label: tr("confirmPassword", context),
+            margin: Dimens.paddingHorizontal10PX,
           ),
         ],
       ),

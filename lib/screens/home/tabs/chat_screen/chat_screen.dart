@@ -1,16 +1,22 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:chatgpt_course/constants/constants.dart';
+import 'package:chatgpt_course/core/localization/localization_methods.dart';
+import 'package:chatgpt_course/core/themes/app_text_style.dart';
 import 'package:chatgpt_course/providers/chats_provider.dart';
+import 'package:chatgpt_course/res.dart';
 import 'package:chatgpt_course/services/services.dart';
 import 'package:chatgpt_course/widgets/chat_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/models_provider.dart';
-import '../services/assets_manager.dart';
-import '../widgets/text_widget.dart';
+import '../../../../providers/models_provider.dart';
+import '../../../../services/assets_manager.dart';
+import '../../../../widgets/text_widget.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -25,6 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late TextEditingController textEditingController;
   late ScrollController _listScrollController;
   late FocusNode focusNode;
+
   @override
   void initState() {
     _listScrollController = ScrollController();
@@ -33,13 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _listScrollController.dispose();
-    textEditingController.dispose();
-    focusNode.dispose();
-    super.dispose();
-  }
+
 
   // List<ChatModel> chatList = [];
   @override
@@ -47,19 +48,25 @@ class _ChatScreenState extends State<ChatScreen> {
     final modelsProvider = Provider.of<ModelsProvider>(context);
     final chatProvider = Provider.of<ChatProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         elevation: 2,
         leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset(AssetsManager.openaiLogo),
+          padding: const EdgeInsets.all(5.0),
+          child: Image.asset(Res.logo),
         ),
-        title: const Text("ChatGPT"),
+        centerTitle: true,
+        title: const Text("Chat Q & A", style: AppTextStyle.s16_w700(color: Colors.black)),
         actions: [
           IconButton(
             onPressed: () async {
               await Services.showModalSheet(context: context);
             },
-            icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
+            icon: const Icon(
+              Icons.more_vert_rounded,
+              color: Colors.white,
+            ),
           ),
         ],
       ),
@@ -82,8 +89,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   }),
             ),
             if (_isTyping) ...[
-              const SpinKitThreeBounce(
-                color: Colors.white,
+               SpinKitThreeBounce(
+                color: primaryColor,
                 size: 18,
               ),
             ],
@@ -99,16 +106,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     Expanded(
                       child: TextField(
                         focusNode: focusNode,
-                        style: const TextStyle(color: Colors.white),
+                        style:  TextStyle(color: primaryColor),
                         controller: textEditingController,
                         onSubmitted: (value) async {
                           await sendMessageFCT(
                               modelsProvider: modelsProvider,
                               chatProvider: chatProvider);
                         },
-                        decoration: const InputDecoration.collapsed(
-                            hintText: "How can I help you",
-                            hintStyle: TextStyle(color: Colors.grey)),
+                        decoration:  InputDecoration.collapsed(
+                            hintText: tr("howCanIHelpU", context),
+                            hintStyle: TextStyle(color: primaryColor)),
                       ),
                     ),
                     IconButton(
@@ -117,9 +124,9 @@ class _ChatScreenState extends State<ChatScreen> {
                               modelsProvider: modelsProvider,
                               chatProvider: chatProvider);
                         },
-                        icon: const Icon(
+                        icon:  Icon(
                           Icons.send,
-                          color: Colors.white,
+                          color: primaryColor
                         ))
                   ],
                 ),
@@ -143,9 +150,9 @@ class _ChatScreenState extends State<ChatScreen> {
       required ChatProvider chatProvider}) async {
     if (_isTyping) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+         SnackBar(
           content: TextWidget(
-            label: "You cant send multiple messages at a time",
+            label: tr("youCantSendMultiMsgs", context),
           ),
           backgroundColor: Colors.red,
         ),
@@ -154,9 +161,9 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     if (textEditingController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+         SnackBar(
           content: TextWidget(
-            label: "Please type a message",
+            label: tr("plzTypeAMsg", context),
           ),
           backgroundColor: Colors.red,
         ),
@@ -164,6 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
     try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
       String msg = textEditingController.text;
       setState(() {
         _isTyping = true;
@@ -174,10 +182,12 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       await chatProvider.sendMessageAndGetAnswers(
           msg: msg, chosenModelId: modelsProvider.getCurrentModel);
-      // chatList.addAll(await ApiService.sendMessage(
-      //   message: textEditingController.text,
-      //   modelId: modelsProvider.getCurrentModel,
-      // ));
+      await firestore
+          .collection("history")
+          .doc(FirebaseAuth.instance.currentUser!.uid).collection("history")
+          .add(
+        {"msg": msg.trim()},
+      );
       setState(() {});
     } catch (error) {
       log("error $error");

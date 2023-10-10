@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatgpt_course/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -63,10 +65,10 @@ class CachedImage extends StatelessWidget{
             borderRadius: haveRadius? borderRadius??BorderRadius.circular(0):null,
             border: Border.all(color: borderColor??Colors.transparent,width: 1),
             shape: boxShape??BoxShape.rectangle,
-            color: bgColor?? context.colors.primary.withOpacity(.5),
+            color: bgColor?? chatGptColor,
         ),
         child: SpinKitFadingCircle(
-          color: context.colors.primary,
+          color: chatGptColor,
           size: 30.0,
         ),
       ),
@@ -74,7 +76,7 @@ class CachedImage extends StatelessWidget{
         width: width,height: height,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: bgColor?? context.colors.primary.withOpacity(.5),
+            color: bgColor?? chatGptColor.withOpacity(.5),
             borderRadius: haveRadius? borderRadius??BorderRadius.circular(0):null,
             border: Border.all(color: borderColor??Colors.transparent,width: 1),
             shape: boxShape??BoxShape.rectangle,

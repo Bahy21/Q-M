@@ -1,7 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import '../../app/constants.dart';
 
 const String contentType = "content-type";
 const String applicationJson = "application/json";
@@ -15,24 +12,14 @@ class DioFactory {
     Map<String, String> headers = {
       contentType: applicationJson,
       accept: applicationJson,
-      authorization:
-          "key=AAAA7SaAVJg:APA91bFSlth5ajUttBWazK3SWGKdVP8cO3WP1MegFPutU0aDw_BV6gBJ1z9fsop9IP6WdbfntzD3nlEy5UE6-PaDJ_m5V8ww7H07OjNyxb02up-KzNMuWNk6rA3pSail7Wx2612rC92d",
+      authorization: "key=AAAA4eq02J0:APA91bEjPdrL25NFDZi3SuAkApc62y8Mbv3bP0swXoOsUlxA1FDNou1iE8AhwP4xP6_xpWatEL7oFod5fXduf0gqNfIIWuXX3rpjNotd3bnRXn_pm4YqAu4RtCo8zo2bswofzRVVFyKa"
     };
     dio.options = BaseOptions(
-      baseUrl: Constants.baseUrl,
-      receiveTimeout: Constants.apiTimeOut,
-      sendTimeout: Constants.apiTimeOut,
+      baseUrl: "",
+      receiveTimeout: const Duration(seconds: 20),
+      sendTimeout: const Duration(seconds: 20),
       headers: headers,
     );
-    if (kDebugMode) {
-      dio.interceptors.add(
-        PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseHeader: true,
-        ),
-      );
-    }
     return dio;
   }
 }

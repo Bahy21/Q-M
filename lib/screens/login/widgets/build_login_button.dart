@@ -16,11 +16,11 @@ class BuildLoginButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10).r,
-          color: Colors.black
+          color: primaryColor
         ),
         child: Text(
           textAlign: TextAlign.center,
-          'Sign In',
+          tr("signIn", context),
           style: TextStyle(
             color: Colors.white,
             fontSize: 14.sp

@@ -9,9 +9,6 @@ class RegisterController {
   TextEditingController email = TextEditingController();
   TextEditingController confirmPass = TextEditingController();
 
-  GenericBloc<bool> visiblePassword = GenericBloc(false);
-  GenericBloc<bool> citiesVisible = GenericBloc(false);
-  GenericBloc<bool> termsBloc = GenericBloc(false);
 
   Future signUp(BuildContext context) async {
     if (formKey.currentState!.validate()) {
@@ -29,15 +26,19 @@ class RegisterController {
   }
 
   void _setRegister(BuildContext context) async {
-    final credential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email.text,
       password: password.text,
     );
+    await FirebaseFirestore.instance.collection("users").doc(credential.user!.uid).set({
+      "is_payment": false,
+      "email": email.text,
+      "device_id": await GetDeviceId().deviceId,
+    });
     if (credential.user != null) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const Home(),
+          builder: (context) => const Payment(),
         ),
       );
     }
@@ -60,9 +61,9 @@ class RegisterController {
       AwesomeDialog(
         context: context,
         title: "Error",
-        body: const Text(
-          'Email is already in use',
-          style: AppTextStyle.s12_w500(color: Colors.black),
+        body:  Text(
+          tr("emailISInUse", context),
+          style: const AppTextStyle.s12_w500(color: Colors.black),
         ),
       );
     }

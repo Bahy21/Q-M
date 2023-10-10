@@ -12,7 +12,7 @@ class AppNotifications {
 
   Future<void> setupNotification() async {
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const android = AndroidInitializationSettings("@mipmap/launcher_icon");
+    const android = AndroidInitializationSettings("@mipmap/ic_launcher");
     const ios = DarwinInitializationSettings();
     const initSettings = InitializationSettings(android: android, iOS: ios);
     _flutterLocalNotificationsPlugin.initialize(
@@ -53,7 +53,7 @@ class AppNotifications {
   Future<void> _showLocalNotification(RemoteMessage? message) async {
     if (message == null) return;
     final android = AndroidNotificationDetails(
-      "${DateTime.now()}",
+      "Notification",
       "Default",
       priority: Priority.high,
       importance: Importance.max,

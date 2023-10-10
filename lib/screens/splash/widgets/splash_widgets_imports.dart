@@ -1,5 +1,5 @@
+import 'package:chatgpt_course/res.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tdd/res.dart';
 
 part 'build_splash_logo.dart';
 

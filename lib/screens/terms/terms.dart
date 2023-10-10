@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 part of 'terms_imports.dart';
 
 class Terms extends StatefulWidget {
@@ -8,30 +10,52 @@ class Terms extends StatefulWidget {
 }
 
 class _TermsState extends State<Terms> {
-  final TermsData termsData = TermsData();
+  late TermsData controller;
 
   @override
   void initState() {
+    controller = TermsData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const DefaultAppBar(title: "شروط الإستخدام"),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 2,
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        title:  Text(tr("termsAndConditions", context), style: const AppTextStyle.s16_w700(color: Colors.black),),
+      ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: AppConstants.padding20,vertical: AppConstants.padding20 ),
-        child: Column(
-          children: [
-            Text(
-              textAlign: TextAlign.start,
-             'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديدمن النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولدمثل هذا النص أو العديد من النصوص الأخرى إضافةإلى زيادة عدد الحروف التى يولدها التطبيق هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق',
-              style: AppTextStyle.s16_w500(color: context.colors.grey.withOpacity(0.6)).copyWith(
-                height: 1.8,
-                letterSpacing: 1.1,
-              ),
-            ),
-          ],
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimens.dp20,
+          vertical: Dimens.dp20,
+        ),
+        child: BlocBuilder<GenericBloc<String>, GenericState<String>>(
+          bloc: controller.termsBloc,
+          builder: (context, state) {
+            return Column(
+              children: [
+                Text(
+                  textAlign: TextAlign.start,
+                  state.data,
+                  style: const AppTextStyle.s16_w500(color: Colors.black54)
+                      .copyWith(
+                    height: 1.8,
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

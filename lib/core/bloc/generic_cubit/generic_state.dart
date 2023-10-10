@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 part of 'generic_cubit.dart';
 
 abstract class GenericState<T> extends Equatable {

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
+import 'package:chatgpt_course/res.dart';
 import 'package:flutter/material.dart';
-import 'package:login_tutorial/res.dart';
 
 
 class AppLoaderWidget extends StatefulWidget {

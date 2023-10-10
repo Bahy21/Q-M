@@ -1,4 +1,4 @@
-package com.example.chatgpt_course
+package login.bahi.ae
 
 import io.flutter.embedding.android.FlutterActivity
 

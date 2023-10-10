@@ -1,10 +1,10 @@
 import 'dart:ui';
 
+import 'package:chatgpt_course/core/widgets/app_loader_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:injectable/injectable.dart';
-import 'package:login_tutorial/core/widgets/app_loader_widget.dart';
 
 
 

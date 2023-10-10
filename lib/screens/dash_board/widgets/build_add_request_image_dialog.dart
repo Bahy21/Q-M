@@ -1,51 +1,52 @@
 // ignore_for_file: use_build_context_synchronously
 
-part of 'add_request_widgets_imports.dart';
+part of 'dash_board_w_imports.dart';
 
-class BuildAddRequestImageDialog extends StatelessWidget {
-  final AddRequestController controller ;
-  const BuildAddRequestImageDialog({Key? key, required this.controller}) : super(key: key);
+class BuildAddImageDialog extends StatelessWidget {
+  final DashBoardController controller;
+
+  const BuildAddImageDialog({Key? key, required this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.symmetric(
-        vertical: AppConstants.padding30,
-        horizontal: AppConstants.padding10,
-      ),
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: Dimens.dp30,
+        horizontal: Dimens.dp10,
+      ).r,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
-          AppConstants.radius15,
+          Dimens.dp15.r,
         ),
       ),
-      backgroundColor: context.colors.white,
+      backgroundColor: Colors.white,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               await controller.getImageFromCamera(context);
               Navigator.pop(context);
             },
             child: Container(
-
-              padding: EdgeInsets.symmetric(
-                horizontal: AppConstants.padding10,
-                vertical: AppConstants.padding10,
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimens.dp10,
+                vertical: Dimens.dp30,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.camera_alt_outlined,
-                    color: context.colors.black,
+                    color: Colors.black,
                     size: 15,
                   ),
                   Gaps.vGap5,
                   Text(
-                    "Camera",
-                    style: AppTextStyle.s12_w400(
-                      color: context.colors.black,
+                    tr("camera", context),
+                    style: const AppTextStyle.s12_w400(
+                      color: Colors.black,
                     ),
                   ),
                 ],
@@ -54,28 +55,28 @@ class BuildAddRequestImageDialog extends StatelessWidget {
           ),
           // Gaps.hGap32,
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               await controller.getRequestImages(context);
               Navigator.pop(context);
-            } ,
+            },
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppConstants.padding10,
-                vertical: AppConstants.padding10,
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimens.dp10,
+                vertical: Dimens.dp10,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.image_outlined,
-                    color: context.colors.black,
+                    color: Colors.black,
                     size: 15,
                   ),
                   Gaps.vGap5,
                   Text(
-                    "Gallary ",
-                    style: AppTextStyle.s12_w400(
-                      color: context.colors.black,
+                    tr("gallary", context),
+                    style: const AppTextStyle.s12_w400(
+                      color: Colors.black,
                     ),
                   ),
                 ],

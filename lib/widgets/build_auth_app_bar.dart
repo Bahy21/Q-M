@@ -1,5 +1,6 @@
+import 'package:chatgpt_course/core/localization/localization_methods.dart';
+import 'package:chatgpt_course/core/themes/app_text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:login_tutorial/core/themes/app_text_style.dart';
 
 class BuildAuthAppBar extends StatelessWidget implements PreferredSizeWidget{
   const BuildAuthAppBar({super.key});
@@ -8,7 +9,7 @@ class BuildAuthAppBar extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
     return  AppBar(
       centerTitle: true,
-      title: const Text('Sign in', style: AppTextStyle.s16_w700(color: Colors.black),),
+      title:  Text( tr("signIn", context), style: const AppTextStyle.s24_w700(color: Colors.black),),
       backgroundColor: Colors.white,
       elevation: 0,
       leading: GestureDetector(
