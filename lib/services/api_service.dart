@@ -3,16 +3,20 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:chatgpt_course/constants/api_consts.dart';
+import 'package:chatgpt_course/core/helpers/global_state.dart';
 import 'package:chatgpt_course/models/chat_model.dart';
 import 'package:chatgpt_course/models/models_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static Future<List<ModelsModel>> getModels() async {
+  static String? apiKey = GlobalState.instance.get("api_key");
+  static Future<List<ModelsModel>> getModels(BuildContext context) async {
     try {
+
       var response = await http.get(
         Uri.parse("$BASE_URL/models"),
-        headers: {'Authorization': 'Bearer $API_KEY'},
+        headers: {'Authorization': 'Bearer $apiKey'},
       );
 
       Map jsonResponse = jsonDecode(response.body);
@@ -36,17 +40,18 @@ class ApiService {
 
   // Send Message using ChatGPT API
   static Future<List<ChatModel>> sendMessageGPT(
-      {required String message, required String modelId}) async {
+      {required String message, required String modelId , required int tokens}) async {
     try {
       log("modelId $modelId");
       var response = await http.post(
         Uri.parse("$BASE_URL/chat/completions"),
         headers: {
-          'Authorization': 'Bearer $API_KEY',
+          'Authorization': 'Bearer $apiKey',
           "Content-Type": "application/json"
         },
         body: jsonEncode(
           {
+            "max_tokens": tokens,
             "model": modelId,
             "messages": [
               {
@@ -57,7 +62,6 @@ class ApiService {
           },
         ),
       );
-
       // Map jsonResponse = jsonDecode(response.body);
       Map jsonResponse = json.decode(utf8.decode(response.bodyBytes));
       if (jsonResponse['error'] != null) {
@@ -84,26 +88,24 @@ class ApiService {
 
   // Send Message fct
   static Future<List<ChatModel>> sendMessage(
-      {required String message, required String modelId}) async {
+      {required String message, required String modelId, required  int tokens}) async {
     try {
       log("modelId $modelId");
       var response = await http.post(
         Uri.parse("$BASE_URL/completions"),
         headers: {
-          'Authorization': 'Bearer $API_KEY',
+          'Authorization': 'Bearer $apiKey',
           "Content-Type": "application/json"
         },
         body: jsonEncode(
           {
             "model": modelId,
             "prompt": message,
-            "max_tokens": 300,
+            "max_tokens": tokens,
           },
         ),
       );
-
       // Map jsonResponse = jsonDecode(response.body);
-
       Map jsonResponse = json.decode(utf8.decode(response.bodyBytes));
       if (jsonResponse['error'] != null) {
         // print("jsonResponse['error'] ${jsonResponse['error']["message"]}");
@@ -111,7 +113,7 @@ class ApiService {
       }
       List<ChatModel> chatList = [];
       if (jsonResponse["choices"].length > 0) {
-        // log("jsonResponse[choices]text ${jsonResponse["choices"][0]["text"]}");
+        log("jsonResponse[choices]text ${jsonResponse["choices"][0]["text"]}");
         chatList = List.generate(
           jsonResponse["choices"].length,
           (index) => ChatModel(

@@ -41,5 +41,16 @@
   "emailISInUse": "البريد الاكتروني مستخدم من قبل",
   "confirmPassword": "تأكيد كلمة المرور",
   "tellUsMoreAboutUrTrip": "أخبرنا أكثر عن تجربتك",
-  "lang": "اللغه"
+  "lang": "اللغه",
+  "selectLanguage": "إختر اللغه",
+  "arabic": "عربي",
+  "ar": "عربي",
+  "english": "االلغه الانجليزيه",
+  "en": "االلغه الانجليزيه",
+  "confirm": "تأكيد",
+  "youMustPay": "يجب الدفع للمتابعه",
+  "goBack": "رجوع",
+  "pay": "دفع",
+  "rememberMe": "تذكرني",
+  "share": "مشاركة التطبيق"
 }

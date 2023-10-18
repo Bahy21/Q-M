@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 part of 'login_widgets_imports.dart';
 
 class BuildLoginForm extends StatelessWidget {
@@ -36,8 +38,41 @@ class BuildLoginForm extends StatelessWidget {
               enableBorderColor: Colors.transparent,
               contentPadding: Dimens.paddingAll10PX,
               label: tr("password", context),
-
               margin: Dimens.paddingHorizontal15PX),
+          BlocBuilder<GenericBloc<bool>, GenericState<bool>>(
+            bloc: controller.rememberMeBloc,
+            builder: (context, state) => Padding(
+              padding: Dimens.paddingHorizontal15PX,
+              child: CheckboxListTile(
+                checkColor: primaryColor,
+                activeColor: Colors.grey,
+                value: state.data,
+                onChanged: (value) async {
+                  var emails = [];
+                  var data = {
+                    "email": controller.email.text,
+                    "password": controller.password.text,
+                  };
+                  if (value == true) {
+                    emails.add(data);
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setString("users", json.encode(emails));
+                  }
+                  controller.rememberMeBloc.onUpdateData(!state.data);
+                  print(emails);
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: const EdgeInsets.only(left: 0, top: 0),
+                title: Text(
+                  tr("rememberMe", context),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

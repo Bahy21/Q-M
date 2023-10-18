@@ -73,6 +73,15 @@ class _MoreState extends State<More> {
                 },
               ),
               BuildMoreItem(
+                title: tr("share", context),
+                icon: Icons.share,
+                onTab: () async {
+                  var data = await FirebaseFirestore.instance.collection("dashBoard").doc("dashBoard").get();
+                  var dashBoard = DashBoardModel.fromJson(data.data()!);
+                  await Share.share(dashBoard.appLink!, subject: "www.google.com");
+                }
+              ),
+              BuildMoreItem(
                 title: tr("privacyPolicy", context),
                 icon: Icons.privacy_tip_outlined,
                 onTab: () {
@@ -84,12 +93,21 @@ class _MoreState extends State<More> {
                 },
               ),
               BuildMoreItem(
-                title: tr("lang", context),
-                icon: Icons.language,
-                onTab: () {
-
-                },
-              ),
+                  title: tr("lang", context),
+                  icon: Icons.language,
+                  onTab: () async {
+                    await showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                      ),
+                      backgroundColor: Colors.white,
+                      context: context,
+                      builder: (context) => const BuildLangBottomSheet(),
+                    );
+                  }),
               BuildMoreItem(
                 title: tr("termsAndConditions", context),
                 icon: Icons.account_balance_sharp,

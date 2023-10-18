@@ -1,8 +1,10 @@
 // ignore_for_file: unused_import
 
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:chatgpt_course/core/bloc/generic_cubit/generic_cubit.dart';
 import 'package:chatgpt_course/core/helpers/di.dart';
 import 'package:chatgpt_course/core/helpers/get_device_id.dart';
 import 'package:chatgpt_course/core/helpers/loading_helper.dart';
@@ -17,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/login_widgets_imports.dart';
 
 part 'login.dart';

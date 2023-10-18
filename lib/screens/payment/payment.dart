@@ -75,6 +75,7 @@ class _PaymentState extends State<Payment> {
             GestureDetector(
               onTap: () => controller.onPayment(context),
               child: Container(
+                margin: const EdgeInsets.only(bottom: 15),
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.symmetric(

@@ -8,6 +8,7 @@ class RegisterController {
   TextEditingController password = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController confirmPass = TextEditingController();
+  TextEditingController lang = TextEditingController();
 
 
   Future signUp(BuildContext context) async {
@@ -34,6 +35,7 @@ class RegisterController {
       "is_payment": false,
       "email": email.text,
       "device_id": await GetDeviceId().deviceId,
+      "lang": context.read<LangCubit>().state.locale.languageCode
     });
     if (credential.user != null) {
       Navigator.of(context).push(

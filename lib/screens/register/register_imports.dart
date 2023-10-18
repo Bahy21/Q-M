@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:chatgpt_course/core/bloc/lang_cubit/lang_cubit.dart';
 import 'package:chatgpt_course/core/constants/dimens.dart';
 import 'package:chatgpt_course/core/helpers/di.dart';
 import 'package:chatgpt_course/core/helpers/get_device_id.dart';
@@ -11,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 

@@ -8,6 +8,7 @@ import 'package:chatgpt_course/core/constants/gaps.dart';
 import 'package:chatgpt_course/core/helpers/custom_toast.dart';
 import 'package:chatgpt_course/core/helpers/di.dart';
 import 'package:chatgpt_course/core/helpers/dio_factory.dart';
+import 'package:chatgpt_course/core/helpers/global_state.dart';
 import 'package:chatgpt_course/core/helpers/loading_helper.dart';
 import 'package:chatgpt_course/core/helpers/utilities.dart';
 import 'package:chatgpt_course/core/helpers/validator.dart';

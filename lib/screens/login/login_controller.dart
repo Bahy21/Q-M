@@ -6,12 +6,12 @@ class LoginController {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
+  final GenericBloc<bool> rememberMeBloc = GenericBloc(false);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   DateTime now = DateTime.now();
 
   Future signIn(BuildContext context) async {
     if (formKey.currentState!.validate()) {
-      getIt.get<LoadingHelper>().showLoadingDialog();
       try {
         _setSignIn(context);
       } on FirebaseAuthException catch (e) {
@@ -35,7 +35,6 @@ class LoginController {
     }
   }
 
-
   void _handleException(BuildContext context, dynamic e) {
     if (e.code == 'weak-password') {
       getIt<LoadingHelper>().dismissDialog();
@@ -57,7 +56,7 @@ class LoginController {
           style: AppTextStyle.s12_w500(color: Colors.black),
         ),
       );
-    }else {
+    } else {
       getIt<LoadingHelper>().dismissDialog();
     }
   }
@@ -66,6 +65,7 @@ class LoginController {
     var user = FirebaseAuth.instance.currentUser;
     var data = await firestore.collection("users").doc(user!.uid).get();
     var parsedUser = UserModel.fromJson(data.data()!);
+    log("data : \n${parsedUser.toJson().toString()}");
     if (parsedUser.isPayment == true) {
       if (parsedUser.paymentType == "week") {
         _handleWeekPayment(parsedUser, context);
@@ -74,27 +74,41 @@ class LoginController {
       } else if (parsedUser.paymentType == "yearly") {
         _handleYearPayment(parsedUser, context);
       }
-    }else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Payment(),));
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const Payment(),
+      ));
     }
   }
-  void _handleWeekPayment (UserModel user, BuildContext context){
-    if (user.paymentDate!.day == now.day - 3 ||
-        user.paymentDate!.isBefore(
+
+  void _handleWeekPayment(UserModel user, BuildContext context) {
+    final DateTime date = user.paymentDate!.toDate();
+    if (date.day == now.day - 3 ||
+        date.isBefore(
           DateTime(
             now.year,
             now.month,
             now.day - 3,
           ),
         )) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const Payment(),
-      ));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const Payment(),
+        ),
+      );
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const Home(),
+        ),
+      );
     }
   }
-  void _handleMonthPayment (UserModel user, BuildContext context){
-    if (user.paymentDate!.month == now.month - 1 ||
-        user.paymentDate!.isBefore(
+
+  void _handleMonthPayment(UserModel user, BuildContext context) {
+    final DateTime date = user.paymentDate!.toDate();
+    if (date.month == now.month - 1 ||
+        date.isBefore(
           DateTime(
             now.year,
             now.month - 1,
@@ -102,15 +116,19 @@ class LoginController {
           ),
         )) {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Payment(),
+        builder: (context) => const Payment(),
       ));
-    }else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home(),));
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const Home(),
+      ));
     }
   }
-  void _handleYearPayment (UserModel user, BuildContext context){
-    if (user.paymentDate!.year == now.year - 1 ||
-        user.paymentDate!.isBefore(
+
+  void _handleYearPayment(UserModel user, BuildContext context) {
+    final DateTime date = user.paymentDate!.toDate();
+    if (date.year == now.year - 1 ||
+        date.isBefore(
           DateTime(
             now.year - 1,
             now.month,
@@ -118,11 +136,12 @@ class LoginController {
           ),
         )) {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Payment(),
+        builder: (context) => const Payment(),
       ));
-    }else{
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home(),));
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const Home(),
+      ));
     }
   }
-
 }

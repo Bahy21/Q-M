@@ -1,9 +1,12 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:chatgpt_course/constants/constants.dart';
+import 'package:chatgpt_course/core/helpers/custom_toast.dart';
 import 'package:chatgpt_course/core/localization/localization_methods.dart';
 import 'package:chatgpt_course/core/themes/app_text_style.dart';
+import 'package:chatgpt_course/models/user_model.dart';
 import 'package:chatgpt_course/providers/chats_provider.dart';
 import 'package:chatgpt_course/res.dart';
 import 'package:chatgpt_course/services/services.dart';
@@ -15,7 +18,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/models_provider.dart';
-import '../../../../services/assets_manager.dart';
 import '../../../../widgets/text_widget.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -40,8 +42,6 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
-
-
   // List<ChatModel> chatList = [];
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,8 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Image.asset(Res.logo),
         ),
         centerTitle: true,
-        title: const Text("Chat Q & A", style: AppTextStyle.s16_w700(color: Colors.black)),
+        title: const Text("Chat Q & A",
+            style: AppTextStyle.s16_w700(color: Colors.black)),
         actions: [
           IconButton(
             onPressed: () async {
@@ -73,23 +74,27 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Flexible(
-              child: ListView.builder(
-                  controller: _listScrollController,
-                  itemCount: chatProvider.getChatList.length, //chatList.length,
-                  itemBuilder: (context, index) {
-                    return ChatWidget(
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _listScrollController,
+                child: Column(
+                  children: List.generate(
+                    chatProvider.getChatList.length,
+                    (index) => ChatWidget(
                       msg: chatProvider
                           .getChatList[index].msg, // chatList[index].msg,
                       chatIndex: chatProvider.getChatList[index]
                           .chatIndex, //chatList[index].chatIndex,
                       shouldAnimate:
                           chatProvider.getChatList.length - 1 == index,
-                    );
-                  }),
+                      listScrollController: _listScrollController,
+                    ),
+                  ),
+                ),
+              ),
             ),
             if (_isTyping) ...[
-               SpinKitThreeBounce(
+              SpinKitThreeBounce(
                 color: primaryColor,
                 size: 18,
               ),
@@ -106,28 +111,34 @@ class _ChatScreenState extends State<ChatScreen> {
                     Expanded(
                       child: TextField(
                         focusNode: focusNode,
-                        style:  TextStyle(color: primaryColor),
+                        style: TextStyle(color: primaryColor),
                         controller: textEditingController,
                         onSubmitted: (value) async {
                           await sendMessageFCT(
-                              modelsProvider: modelsProvider,
-                              chatProvider: chatProvider);
+                            modelsProvider: modelsProvider,
+                            chatProvider: chatProvider,
+                          );
                         },
-                        decoration:  InputDecoration.collapsed(
-                            hintText: tr("howCanIHelpU", context),
-                            hintStyle: TextStyle(color: primaryColor)),
+                        decoration: InputDecoration.collapsed(
+                          hintText: tr("howCanIHelpU", context),
+                          hintStyle: TextStyle(
+                            color: primaryColor,
+                          ),
+                        ),
                       ),
                     ),
                     IconButton(
-                        onPressed: () async {
-                          await sendMessageFCT(
-                              modelsProvider: modelsProvider,
-                              chatProvider: chatProvider);
-                        },
-                        icon:  Icon(
-                          Icons.send,
-                          color: primaryColor
-                        ))
+                      onPressed: () async {
+                        await sendMessageFCT(
+                          modelsProvider: modelsProvider,
+                          chatProvider: chatProvider,
+                        );
+                      },
+                      icon: Icon(
+                        Icons.send,
+                        color: primaryColor,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -140,17 +151,19 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void scrollListToEND() {
     _listScrollController.animateTo(
-        _listScrollController.position.maxScrollExtent,
-        duration: const Duration(seconds: 2),
-        curve: Curves.easeOut);
+      _listScrollController.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.easeOut,
+    );
   }
 
-  Future<void> sendMessageFCT(
-      {required ModelsProvider modelsProvider,
-      required ChatProvider chatProvider}) async {
+  Future<void> sendMessageFCT({
+    required ModelsProvider modelsProvider,
+    required ChatProvider chatProvider,
+  }) async {
     if (_isTyping) {
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
+        SnackBar(
           content: TextWidget(
             label: tr("youCantSendMultiMsgs", context),
           ),
@@ -161,7 +174,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     if (textEditingController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
+        SnackBar(
           content: TextWidget(
             label: tr("plzTypeAMsg", context),
           ),
@@ -180,11 +193,23 @@ class _ChatScreenState extends State<ChatScreen> {
         textEditingController.clear();
         focusNode.unfocus();
       });
+      var uid =
+          FirebaseAuth.instance.currentUser!.uid;
+      var user = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .get();
+      var parsedUser = UserModel.fromJson(user.data()!);
+      print(parsedUser.isPayment);
       await chatProvider.sendMessageAndGetAnswers(
-          msg: msg, chosenModelId: modelsProvider.getCurrentModel);
+        msg: msg,
+        chosenModelId: modelsProvider.getCurrentModel,
+        tokens: parsedUser.isPayment == true ? 1000 : 200,
+      );
       await firestore
           .collection("history")
-          .doc(FirebaseAuth.instance.currentUser!.uid).collection("history")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("history")
           .add(
         {"msg": msg.trim()},
       );
@@ -204,4 +229,5 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     }
   }
+
 }

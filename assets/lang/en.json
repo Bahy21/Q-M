@@ -41,5 +41,15 @@
   "signUp": "Sign Up",
   "emailISInUse": "Email is already in use",
   "confirmPassword": "Confirm password",
-  "tellUsMoreAboutUrTrip": "Tell us more about your trip"
+  "tellUsMoreAboutUrTrip": "Tell us more about your trip",
+  "selectLanguage": "Select your language",
+  "arabic": "Arabic",
+  "ar": "Arabic",
+  "en": "English",
+  "confirm": "Confirm",
+  "youMustPay": "You must pay for continue",
+  "goBack": "Go Back",
+  "pay": "Pay",
+  "rememberMe": "Remember Me",
+  "share": "Share"
 }

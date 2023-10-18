@@ -31,8 +31,8 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
             color: Colors.black,
           ),
         ),
-        title: const Text("Terms And Conditions",
-            style: AppTextStyle.s16_w700(color: Colors.black)),
+        title:  Text( tr("privacyPolicy", context),
+            style: const AppTextStyle.s16_w700(color: Colors.black)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
@@ -45,7 +45,6 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
             return Column(
               children: [
                 Text(
-                  textAlign: TextAlign.end,
                   state.data,
                   style: const AppTextStyle.s16_w500(
                     color: Colors.black54,

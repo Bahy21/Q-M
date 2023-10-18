@@ -3,7 +3,6 @@ import 'package:chatgpt_course/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class ModelsProvider with ChangeNotifier {
-  // String currentModel = "text-davinci-003";
   String currentModel = "gpt-3.5-turbo-0301";
 
   String get getCurrentModel {
@@ -21,8 +20,8 @@ class ModelsProvider with ChangeNotifier {
     return modelsList;
   }
 
-  Future<List<ModelsModel>> getAllModels() async {
-    modelsList = await ApiService.getModels();
+  Future<List<ModelsModel>> getAllModels(BuildContext context) async {
+    modelsList = await ApiService.getModels(context);
     return modelsList;
   }
 }

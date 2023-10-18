@@ -17,7 +17,8 @@ class BuildPayOptions extends StatelessWidget {
                 controller.payOptionsBloc.onUpdateData(PayOptions.daysFree);
               },
               child: Container(
-                padding: const EdgeInsets.only(left: 10, bottom: 10),
+                padding:
+                    const EdgeInsetsDirectional.only(start: 10, bottom: 10),
                 decoration: state.data == PayOptions.daysFree
                     ? CustomDecoration().copyWith(
                         border: Border.all(
@@ -32,7 +33,9 @@ class BuildPayOptions extends StatelessWidget {
                       children: [
                         const Text(
                           "3 days Free Trial, Auto Renewal",
-                          style: AppTextStyle.s14_w600(color: Colors.black),
+                          style: AppTextStyle.s14_w600(
+                            color: Colors.black,
+                          ),
                         ),
                         const Spacer(),
                         Container(
@@ -40,15 +43,16 @@ class BuildPayOptions extends StatelessWidget {
                           decoration: state.data == PayOptions.daysFree
                               ? BoxDecoration(
                                   border: Border.all(color: primaryColor),
-                                  borderRadius: BorderRadius.only(
-                                    topRight: const Radius.circular(3),
-                                    bottomLeft:
+                                  borderRadius: BorderRadiusDirectional.only(
+                                    topStart: const Radius.circular(3),
+                                    bottomStart:
                                         const Radius.circular(Dimens.dp24).r,
                                   ),
                                 )
                               : BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.grey.withOpacity(.3)),
+                                    color: Colors.grey.withOpacity(.3),
+                                  ),
                                   borderRadius: BorderRadius.only(
                                     topRight: const Radius.circular(5).r,
                                     bottomLeft:
@@ -81,8 +85,8 @@ class BuildPayOptions extends StatelessWidget {
                         ),
                       ],
                     ),
-                     Text(
-                      tr("weekSubscribe",context),
+                    Text(
+                      tr("weekSubscribe", context),
                       style: const AppTextStyle.s14_w600(color: Colors.black),
                     ),
                   ],
@@ -95,7 +99,8 @@ class BuildPayOptions extends StatelessWidget {
                 controller.payOptionsBloc.onUpdateData(PayOptions.monthly);
               },
               child: Container(
-                padding: const EdgeInsets.only(left: 10, bottom: 10),
+                padding:
+                const EdgeInsetsDirectional.only(start: 10, bottom: 10),
                 decoration: state.data == PayOptions.monthly
                     ? CustomDecoration().copyWith(
                         border: Border.all(
@@ -132,7 +137,7 @@ class BuildPayOptions extends StatelessWidget {
                         ),
                       ],
                     ),
-                     Text(
+                    Text(
                       tr("monthSubscribe", context),
                       style: const AppTextStyle.s14_w600(color: Colors.black),
                     ),
@@ -146,7 +151,7 @@ class BuildPayOptions extends StatelessWidget {
                 controller.payOptionsBloc.onUpdateData(PayOptions.yearly);
               },
               child: Container(
-                padding: const EdgeInsets.only(left: 10, bottom: 10),
+                padding: const EdgeInsetsDirectional.only(start: 10, bottom: 10),
                 decoration: state.data == PayOptions.yearly
                     ? CustomDecoration().copyWith(
                         border: Border.all(
@@ -183,7 +188,7 @@ class BuildPayOptions extends StatelessWidget {
                         ),
                       ],
                     ),
-                      Text(
+                    Text(
                       tr("yearSubscribe", context),
                       style: const AppTextStyle.s14_w600(color: Colors.black),
                     ),

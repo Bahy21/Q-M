@@ -4,6 +4,8 @@ class DashBoardController {
   final TextEditingController termsAnnConditions = TextEditingController();
   final TextEditingController privacyPolicy = TextEditingController();
   final TextEditingController notification = TextEditingController();
+  final TextEditingController apiKey = TextEditingController();
+  final TextEditingController appLink = TextEditingController();
   final GenericBloc<List<dynamic>> imagesBloc = GenericBloc([]);
   final GenericBloc<List<ReviewModel>> reviews = GenericBloc([]);
   final GenericBloc<List<UserModel>> users = GenericBloc([]);
@@ -22,8 +24,10 @@ class DashBoardController {
     if (data.data() == null) return;
     final parsedData = DashBoardModel.fromJson(data.data()!);
     dashBoardData.onUpdateData(parsedData);
+    appLink.text = parsedData.appLink ?? "";
     termsAnnConditions.text = dashBoardData.state.data?.terms ?? "";
     privacyPolicy.text = dashBoardData.state.data?.privacy ?? "";
+    apiKey.text = dashBoardData.state.data?.apiKey ??"" ;
     imagesBloc.state.data.addAll(dashBoardData.state.data?.images ?? []);
     imagesBloc.onUpdateData(imagesBloc.state.data);
   }
@@ -48,6 +52,8 @@ class DashBoardController {
           "imgs": images,
           "terms": termsAnnConditions.text,
           "privacy": privacyPolicy.text,
+          "api_key": apiKey.text,
+          "app_link": appLink.text
         },
       );
       getIt<LoadingHelper>().dismissDialog();
@@ -55,7 +61,7 @@ class DashBoardController {
     } catch  (e){
       log(e.toString());
     }
-
+    GlobalState.instance.set("api_key", apiKey.text);
   }
 
   Future<File?> getImageFromCamera(BuildContext context) async {

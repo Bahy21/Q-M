@@ -7,14 +7,14 @@ import 'package:provider/provider.dart';
 import '../constants/constants.dart';
 import '../models/models_model.dart';
 
-class ModelsDrowDownWidget extends StatefulWidget {
-  const ModelsDrowDownWidget({super.key});
+class ModelsDropDownWidget extends StatefulWidget {
+  const ModelsDropDownWidget({super.key});
 
   @override
-  State<ModelsDrowDownWidget> createState() => _ModelsDrowDownWidgetState();
+  State<ModelsDropDownWidget> createState() => _ModelsDropDownWidgetState();
 }
 
-class _ModelsDrowDownWidgetState extends State<ModelsDrowDownWidget> {
+class _ModelsDropDownWidgetState extends State<ModelsDropDownWidget> {
   String? currentModel;
 
   bool isFirstLoading = true;
@@ -23,7 +23,7 @@ class _ModelsDrowDownWidgetState extends State<ModelsDrowDownWidget> {
     final modelsProvider = Provider.of<ModelsProvider>(context, listen: false);
     currentModel = modelsProvider.getCurrentModel;
     return FutureBuilder<List<ModelsModel>>(
-        future: modelsProvider.getAllModels(),
+        future: modelsProvider.getAllModels(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
               isFirstLoading == true) {

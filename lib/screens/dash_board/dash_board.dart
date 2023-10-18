@@ -33,7 +33,7 @@ class _DashBoardState extends State<DashBoard> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        title:  Text(
+        title: Text(
           tr("dashBoard", context),
           style: const AppTextStyle.s16_w700(color: Colors.black),
         ),
@@ -112,7 +112,7 @@ class _DashBoardState extends State<DashBoard> {
                                     image: DecorationImage(
                                       image: (state.data[index] is String
                                           ? NetworkImage(
-                                               state.data[index],
+                                              state.data[index],
                                             )
                                           : FileImage(
                                               state.data[index],
@@ -166,9 +166,8 @@ class _DashBoardState extends State<DashBoard> {
               ),
               Gaps.vGap15,
               GenericTextField(
-                max: 10,
-                controller: controller.termsAnnConditions,
-                fieldTypes: FieldTypes.rich,
+                controller: controller.appLink,
+                fieldTypes: FieldTypes.normal,
                 focusBorderColor: primaryColor,
                 enableBorderColor: Colors.transparent,
                 type: TextInputType.text,
@@ -176,9 +175,39 @@ class _DashBoardState extends State<DashBoard> {
                 action: TextInputAction.next,
                 textColor: Colors.black,
                 validate: (value) => value!.validateEmpty(),
+                label: "App link",
+                margin: const EdgeInsets.only(bottom: 15),
+              ),
+              Gaps.vGap15,
+              GenericTextField(
+                controller: controller.apiKey,
+                fieldTypes: FieldTypes.normal,
+                focusBorderColor: primaryColor,
+                enableBorderColor: Colors.transparent,
+                type: TextInputType.text,
+                fillColor: cardColor,
+                action: TextInputAction.none,
+                textColor: Colors.black,
+                validate: (value) => value!.validateEmpty(),
+                label: "API key",
+                margin: const EdgeInsets.only(bottom: 15),
+              ),
+              Gaps.vGap15,
+              GenericTextField(
+                max: 10,
+                controller: controller.termsAnnConditions,
+                fieldTypes: FieldTypes.rich,
+                focusBorderColor: primaryColor,
+                enableBorderColor: Colors.transparent,
+                type: TextInputType.multiline,
+                fillColor: cardColor,
+                action: TextInputAction.newline,
+                textColor: Colors.black,
+                validate: (value) => value!.validateEmpty(),
                 label: tr("termsAndConditions", context),
                 margin: const EdgeInsets.only(bottom: 15),
               ),
+              Gaps.vGap15,
               GenericTextField(
                 max: 10,
                 controller: controller.privacyPolicy,
@@ -217,8 +246,9 @@ class _DashBoardState extends State<DashBoard> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: cubit.reviews.length,
                       padding: const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 10)
-                          .r,
+                        vertical: 20,
+                        horizontal: 10,
+                      ).r,
                       itemBuilder: (context, index) => Container(
                         margin: EdgeInsets.only(bottom: 10.h),
                         width: MediaQuery.of(context).size.width,
@@ -256,8 +286,8 @@ class _DashBoardState extends State<DashBoard> {
                               itemSize: Dimens.dp20,
                               glowColor: primaryColor,
                               itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 10),
-                              itemBuilder: (context, index) =>  Icon(
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              itemBuilder: (context, index) => Icon(
                                 Icons.star_border,
                                 color: primaryColor,
                               ),
@@ -320,8 +350,8 @@ class _DashBoardState extends State<DashBoard> {
                                               BorderRadius.circular(25),
                                           color: primaryColor,
                                         ),
-                                        child:  Text(tr('sendNotify', context),
-                                            style:const AppTextStyle.s14_w600(
+                                        child: Text(tr('sendNotify', context),
+                                            style: const AppTextStyle.s14_w600(
                                                 color: Colors.white)),
                                       ),
                                     ],
