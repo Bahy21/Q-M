@@ -28,6 +28,7 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       child: Scaffold(
         body: PageView(
+          reverse: true,
           controller: controller.pageController,
           children: const <Widget>[
             More(),

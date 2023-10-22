@@ -51,5 +51,11 @@
   "goBack": "Go Back",
   "pay": "Pay",
   "rememberMe": "Remember Me",
-  "share": "Share"
+  "share": "Share",
+  "threeDays": "3 days Free Trial, Auto Renewal",
+  "payment": "Payment",
+  "noPaymentNow": "No Payment Now",
+  "billedOnce": "Billed Once",
+  "save70": "Save 70%",
+  "youUsedFreeTrial": "You have already used the free trial one previously"
 }

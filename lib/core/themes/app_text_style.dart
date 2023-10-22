@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTextStyle extends TextStyle {
   const AppTextStyle() : super();
@@ -56,16 +57,16 @@ class AppTextStyle extends TextStyle {
       : super(color: color, fontSize: 13, fontWeight: weight500, height: fontHeight,);
 
   // ignore: non_constant_identifier_names
-  const AppTextStyle.s14_w400({required Color color})
-      : super(color: color, fontSize: 14, fontWeight: FontWeight.w400, height: fontHeight,);
+   AppTextStyle.s14_w400({required Color color})
+      : super(color: color, fontSize: 14.sp, fontWeight: FontWeight.w400, height: fontHeight,);
 
   // ignore: non_constant_identifier_names
-  const AppTextStyle.s14_w500({required Color color})
-      : super(color: color, fontSize: 14, fontWeight: weight500, height: fontHeight,);
+   AppTextStyle.s14_w500({required Color color})
+      : super(color: color, fontSize: 14.sp, fontWeight: weight500, height: fontHeight,);
 
   // ignore: non_constant_identifier_names
-  const AppTextStyle.s14_w600({required Color color})
-      : super(color: color, fontSize: 14, fontWeight: FontWeight.w600, height: fontHeight,);
+   AppTextStyle.s14_w600({required Color color})
+      : super(color: color, fontSize: 14.sp, fontWeight: FontWeight.w600, height: fontHeight,);
 
   // ignore: non_constant_identifier_names
   const AppTextStyle.s14_w800({required Color color})

@@ -58,7 +58,7 @@ class _DashBoardState extends State<DashBoard> {
               child: Text(
                 tr("update", context).toUpperCase(),
                 textAlign: TextAlign.center,
-                style: const AppTextStyle.s14_w600(color: Colors.white),
+                style:  AppTextStyle.s14_w600(color: Colors.white),
               ),
             ),
           ],
@@ -331,7 +331,7 @@ class _DashBoardState extends State<DashBoard> {
                               children: [
                                 Text(
                                   state.data[index].email!,
-                                  style: const AppTextStyle.s14_w600(
+                                  style:  AppTextStyle.s14_w600(
                                     color: Colors.black,
                                   ),
                                 ),
@@ -351,7 +351,7 @@ class _DashBoardState extends State<DashBoard> {
                                           color: primaryColor,
                                         ),
                                         child: Text(tr('sendNotify', context),
-                                            style: const AppTextStyle.s14_w600(
+                                            style:  AppTextStyle.s14_w600(
                                                 color: Colors.white)),
                                       ),
                                     ],

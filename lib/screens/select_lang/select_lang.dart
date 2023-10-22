@@ -19,7 +19,7 @@ class _SelectLangState extends State<SelectLang> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: const Text(
+        title:  Text(
           "Select Lang",
           style: AppTextStyle.s14_w600(
             color: Colors.black,
@@ -56,7 +56,7 @@ class _SelectLangState extends State<SelectLang> {
                   ),
                   child: Text(
                     tr("arabic", context),
-                    style: const AppTextStyle.s14_w600(
+                    style:  AppTextStyle.s14_w600(
                       color: Colors.black,
                     ),
                   ),
@@ -79,7 +79,7 @@ class _SelectLangState extends State<SelectLang> {
                   ),
                   child: Text(
                     tr("english", context),
-                    style: const AppTextStyle.s14_w600(
+                    style:  AppTextStyle.s14_w600(
                       color: Colors.black,
                     ),
                   ),
@@ -105,7 +105,7 @@ class _SelectLangState extends State<SelectLang> {
                   child: Text(
                     textAlign: TextAlign.center,
                     tr("confirm", context),
-                    style: const AppTextStyle.s14_w600(
+                    style:  AppTextStyle.s14_w600(
                       color: Colors.white,
                     ),
                   ),

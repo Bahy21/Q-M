@@ -30,7 +30,7 @@ class _SplashState extends State<Splash> {
       backgroundColor: Colors.white,
       body: Center(
         child: TextAnimator(
-          'Q & M',
+          'Q & A',
           initialDelay: const   Duration(milliseconds: 1000),
           style: const TextStyle(color: Colors.black, fontWeight:FontWeight.w700, fontSize: 25),
           incomingEffect: WidgetTransitionEffects.incomingScaleDown(

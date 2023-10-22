@@ -127,7 +127,7 @@ class _HomeMainState extends State<HomeMain> {
                         history[index],
                         textAlign: TextAlign.start,
                         style:
-                        const AppTextStyle.s14_w600(color: Colors.black),
+                         AppTextStyle.s14_w600(color: Colors.black),
                       ),
                     )),
                   ),

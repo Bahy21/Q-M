@@ -93,6 +93,18 @@ class _MoreState extends State<More> {
                 },
               ),
               BuildMoreItem(
+                title: tr("payment", context),
+                icon: Icons.payment_outlined,
+                onTab: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const Payment(),
+                    ),
+                  );
+                },
+              ),
+
+              BuildMoreItem(
                   title: tr("lang", context),
                   icon: Icons.language,
                   onTab: () async {

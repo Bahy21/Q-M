@@ -5,6 +5,7 @@ import 'package:chatgpt_course/res.dart';
 import 'package:chatgpt_course/screens/dash_board/dash_board_imports.dart';
 import 'package:chatgpt_course/screens/home/tabs/more/more_cubit/more_cubit.dart';
 import 'package:chatgpt_course/screens/home/tabs/more/widgets/more_w_imports.dart';
+import 'package:chatgpt_course/screens/payment/payment_imports.dart';
 import 'package:chatgpt_course/screens/privacy_policy/privacy_policy_imports.dart';
 import 'package:chatgpt_course/screens/review/review_imports.dart';
 import 'package:chatgpt_course/screens/splash/splash_imports.dart';

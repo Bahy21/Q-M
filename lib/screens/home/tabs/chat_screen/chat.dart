@@ -3,7 +3,6 @@
 import 'dart:developer';
 
 import 'package:chatgpt_course/constants/constants.dart';
-import 'package:chatgpt_course/core/helpers/custom_toast.dart';
 import 'package:chatgpt_course/core/localization/localization_methods.dart';
 import 'package:chatgpt_course/core/themes/app_text_style.dart';
 import 'package:chatgpt_course/models/user_model.dart';
@@ -29,6 +28,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   bool _isTyping = false;
+  late String question ;
 
   late TextEditingController textEditingController;
   late ScrollController _listScrollController;
@@ -81,12 +81,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: List.generate(
                     chatProvider.getChatList.length,
                     (index) => ChatWidget(
-                      msg: chatProvider
-                          .getChatList[index].msg, // chatList[index].msg,
-                      chatIndex: chatProvider.getChatList[index]
-                          .chatIndex, //chatList[index].chatIndex,
-                      shouldAnimate:
-                          chatProvider.getChatList.length - 1 == index,
+                      msg: chatProvider.getChatList[index].msg, // chatList[index].msg,
+                      chatIndex: chatProvider.getChatList[index].chatIndex, //chatList[index].chatIndex,
+                      shouldAnimate: chatProvider.getChatList.length - 1 == index,
                       listScrollController: _listScrollController,
                     ),
                   ),
@@ -200,7 +197,6 @@ class _ChatScreenState extends State<ChatScreen> {
           .doc(uid)
           .get();
       var parsedUser = UserModel.fromJson(user.data()!);
-      print(parsedUser.isPayment);
       await chatProvider.sendMessageAndGetAnswers(
         msg: msg,
         chosenModelId: modelsProvider.getCurrentModel,

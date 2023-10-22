@@ -10,7 +10,7 @@ class BuildSignInWithGoogle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-           Text(tr("signInWithGoogle", context) ,style: const AppTextStyle.s14_w600(color: Colors.black)),
+           Text(tr("signInWithGoogle", context) ,style:  AppTextStyle.s14_w600(color: Colors.black)),
           Gaps.hGap10,
           Image.asset(Res.google, height: Dimens.dp20.h, width: Dimens.dp20.w,)
         ],

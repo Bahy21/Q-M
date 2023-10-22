@@ -9,6 +9,7 @@ class Payment extends StatefulWidget {
 
 class _PaymentState extends State<Payment> {
   final PaymentController controller = PaymentController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +36,7 @@ class _PaymentState extends State<Payment> {
                         scale: 8,
                       ),
                       Gaps.hGap10,
-                       Text(
+                      Text(
                         tr("chatGPT4", context),
                         style: const AppTextStyle.s16_w700(color: Colors.black),
                       ),
@@ -49,7 +50,7 @@ class _PaymentState extends State<Payment> {
                         scale: 13,
                       ),
                       Gaps.hGap10,
-                       Text(
+                      Text(
                         tr("noLimits", context),
                         style: const AppTextStyle.s16_w700(color: Colors.black),
                       ),
@@ -58,11 +59,16 @@ class _PaymentState extends State<Payment> {
                   Gaps.vGap32,
                   Row(
                     children: [
-                      Image.asset(Res.noAds, scale: 3),
+                      Image.asset(
+                        Res.noAds,
+                        scale: 3,
+                      ),
                       Gaps.hGap10,
                       Text(
                         tr("noAds", context),
-                        style: const AppTextStyle.s16_w700(color: Colors.black),
+                        style: const AppTextStyle.s16_w700(
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
@@ -70,7 +76,9 @@ class _PaymentState extends State<Payment> {
               ),
             ),
             Gaps.vGap50,
-             BuildPayOptions(controller: controller,),
+            BuildPayOptions(
+              controller: controller,
+            ),
             const Spacer(),
             GestureDetector(
               onTap: () => controller.onPayment(context),
@@ -78,17 +86,15 @@ class _PaymentState extends State<Payment> {
                 margin: const EdgeInsets.only(bottom: 15),
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 20
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 decoration: BoxDecoration(
                   color: primaryColor,
                   borderRadius: BorderRadius.circular(25),
                 ),
-                child:  Text(
+                child: Text(
                   tr("startFreeTrialAndPay", context),
-                  style: const AppTextStyle.s14_w600(color: Colors.white),
+                  style:  AppTextStyle.s14_w600(color: Colors.white),
                 ),
               ),
             )

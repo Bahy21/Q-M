@@ -8,7 +8,6 @@ import 'package:chatgpt_course/res.dart';
 import 'package:chatgpt_course/services/assets_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -84,12 +83,18 @@ class ChatWidget extends StatelessWidget {
                                     displayFullTextOnTap: true,
                                     totalRepeatCount: 0,
                                     onFinished: () async {
-                                      var uid =
-                                          FirebaseAuth.instance.currentUser!.uid;
+                                      var firestore = FirebaseFirestore.instance ;
+                                      var uid = FirebaseAuth.instance.currentUser!.uid;
                                       var user = await FirebaseFirestore.instance
                                           .collection("users")
                                           .doc(uid)
                                           .get();
+                                      await firestore.collection("chatHistory").doc(uid).collection("items").add(
+                                        {
+                                          "questions": chatIndex ,
+                                          "answer":""
+                                        }
+                                      );
                                       var parsedUser = UserModel.fromJson(user.data()!);
                                       if (parsedUser.isPayment == false) {
                                         // ignore: use_build_context_synchronously

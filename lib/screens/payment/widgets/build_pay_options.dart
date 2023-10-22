@@ -13,12 +13,12 @@ class BuildPayOptions extends StatelessWidget {
         return Column(
           children: [
             GestureDetector(
-              onTap: () {
+              onTap: () async{
+
                 controller.payOptionsBloc.onUpdateData(PayOptions.daysFree);
               },
               child: Container(
-                padding:
-                    const EdgeInsetsDirectional.only(start: 10, bottom: 10),
+                padding: const EdgeInsetsDirectional.only(start: 10, bottom: 10),
                 decoration: state.data == PayOptions.daysFree
                     ? CustomDecoration().copyWith(
                         border: Border.all(
@@ -30,14 +30,14 @@ class BuildPayOptions extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "3 days Free Trial, Auto Renewal",
-                          style: AppTextStyle.s14_w600(
+                         Text(
+                          tr("threeDays", context),
+                          style: const AppTextStyle.s12_w500(
                             color: Colors.black,
                           ),
                         ),
-                        const Spacer(),
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: state.data == PayOptions.daysFree
@@ -74,9 +74,9 @@ class BuildPayOptions extends StatelessWidget {
                                 ),
                               ),
                               Gaps.hGap10,
-                              const Text(
-                                "No Payment Now",
-                                style: AppTextStyle.s14_w600(
+                               Text(
+                                tr("noPaymentNow", context),
+                                style: const AppTextStyle.s12_w500(
                                   color: Colors.black,
                                 ),
                               ),
@@ -87,7 +87,7 @@ class BuildPayOptions extends StatelessWidget {
                     ),
                     Text(
                       tr("weekSubscribe", context),
-                      style: const AppTextStyle.s14_w600(color: Colors.black),
+                      style:  AppTextStyle.s14_w600(color: Colors.black),
                     ),
                   ],
                 ),
@@ -113,8 +113,8 @@ class BuildPayOptions extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Text(
-                          "Billed Once",
+                        Text(
+                          tr("billedOnce", context),
                           style: AppTextStyle.s14_w600(color: Colors.black),
                         ),
                         const Spacer(),
@@ -128,8 +128,8 @@ class BuildPayOptions extends StatelessWidget {
                                 Border.all(color: Colors.grey.withOpacity(.3)),
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          child: const Text(
-                            "Save 70 %",
+                          child:  Text(
+                            tr("save70", context),
                             style: AppTextStyle.s14_w600(
                               color: Colors.black,
                             ),
@@ -139,7 +139,7 @@ class BuildPayOptions extends StatelessWidget {
                     ),
                     Text(
                       tr("monthSubscribe", context),
-                      style: const AppTextStyle.s14_w600(color: Colors.black),
+                      style:  AppTextStyle.s14_w600(color: Colors.black),
                     ),
                   ],
                 ),
@@ -164,8 +164,8 @@ class BuildPayOptions extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Text(
-                          "Billed Once",
+                         Text(
+                          tr("billedOnce", context),
                           style: AppTextStyle.s14_w600(color: Colors.black),
                         ),
                         const Spacer(),
@@ -179,7 +179,7 @@ class BuildPayOptions extends StatelessWidget {
                                 Border.all(color: Colors.grey.withOpacity(.3)),
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          child: const Text(
+                          child:  Text(
                             "Save 70 %",
                             style: AppTextStyle.s14_w600(
                               color: Colors.black,
@@ -190,7 +190,7 @@ class BuildPayOptions extends StatelessWidget {
                     ),
                     Text(
                       tr("yearSubscribe", context),
-                      style: const AppTextStyle.s14_w600(color: Colors.black),
+                      style:  AppTextStyle.s14_w600(color: Colors.black),
                     ),
                   ],
                 ),

@@ -58,7 +58,7 @@ class BuildSendNotifyDialog extends StatelessWidget {
               ),
               child:  Text(
                  tr("send", context),
-                style: const AppTextStyle.s14_w600(
+                style:  AppTextStyle.s14_w600(
                   color: Colors.white,
                 ),
               ),

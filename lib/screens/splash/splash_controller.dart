@@ -46,9 +46,17 @@ class SplashController {
             now.month,
             now.day - 3,
           ),
+        ) ||
+        date.isBefore(
+          DateTime(
+            now.year,
+            now.month,
+            now.day - 7,
+          ),
         )) {
-      await FirebaseFirestore.instance.collection("users").doc(uid).update ({
+      await FirebaseFirestore.instance.collection("users").doc(uid).update({
         "payment_type": "week",
+        "used_free": true,
         "is_payment": false,
       });
       Navigator.of(context).push(
