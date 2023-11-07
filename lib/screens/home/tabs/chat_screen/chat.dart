@@ -1,22 +1,28 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:developer';
+import 'dart:io';
 
-import 'package:chatgpt_course/constants/constants.dart';
-import 'package:chatgpt_course/core/localization/localization_methods.dart';
-import 'package:chatgpt_course/core/themes/app_text_style.dart';
-import 'package:chatgpt_course/models/user_model.dart';
-import 'package:chatgpt_course/providers/chats_provider.dart';
-import 'package:chatgpt_course/res.dart';
-import 'package:chatgpt_course/services/services.dart';
-import 'package:chatgpt_course/widgets/chat_widget.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_tesseract_ocr/android_ios.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../constants/constants.dart';
+import '../../../../core/localization/localization_methods.dart';
+import '../../../../core/themes/app_text_style.dart';
+import '../../../../models/user_model.dart';
+import '../../../../providers/chats_provider.dart';
 import '../../../../providers/models_provider.dart';
+import '../../../../res.dart';
+import '../../../../services/services.dart';
+import '../../../../widgets/chat_widget.dart';
 import '../../../../widgets/text_widget.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -108,14 +114,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     Expanded(
                       child: TextField(
                         focusNode: focusNode,
+                        maxLines: null,
                         style: TextStyle(color: primaryColor),
                         controller: textEditingController,
-                        onSubmitted: (value) async {
-                          await sendMessageFCT(
-                            modelsProvider: modelsProvider,
-                            chatProvider: chatProvider,
-                          );
-                        },
+                        // onSubmitted: (value) async {
+                        //   await sendMessageFCT(
+                        //     modelsProvider: modelsProvider,
+                        //     chatProvider: chatProvider,
+                        //   );
+                        // },
                         decoration: InputDecoration.collapsed(
                           hintText: tr("howCanIHelpU", context),
                           hintStyle: TextStyle(
@@ -135,7 +142,28 @@ class _ChatScreenState extends State<ChatScreen> {
                         Icons.send,
                         color: primaryColor,
                       ),
-                    )
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        if(await Permission.camera.isGranted)
+                         runFilePiker(ImageSource.camera);
+                        else
+                          await Permission.camera.request();
+                      },
+                      icon: Icon(
+                        Icons.camera_alt,
+                        color: primaryColor,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                          runFilePiker(ImageSource.gallery);
+                      },
+                      icon: Icon(
+                        Icons.camera,
+                        color: primaryColor,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -144,6 +172,43 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+  void runFilePiker(ImageSource) async {
+    // android && ios only
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource,requestFullMetadata: true);
+    if (pickedFile != null) {
+      _ocr(pickedFile.path);
+    }
+  }
+  String _ocrText = '';
+  var selectList = ["eng", "ara"];
+  String path = "";
+  bool bload = false;
+  void _ocr(url) async {
+    path = url;
+    if (kIsWeb == false && (url.indexOf("http://") == 0 || url.indexOf("https://") == 0)) {
+      Directory tempDir = await getTemporaryDirectory();
+      HttpClient httpClient = HttpClient();
+      HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
+      HttpClientResponse response = await request.close();
+      Uint8List bytes = await consolidateHttpClientResponseBytes(response);
+      String dir = tempDir.path;
+      print('$dir/test.jpg');
+      File file = File('$dir/test.jpg');
+      await file.writeAsBytes(bytes);
+      url = file.path;
+    }
+    var langs = selectList.join("+");
+
+    bload = true;
+    setState(() {});
+
+    textEditingController.text = await FlutterTesseractOcr.extractText(url, language: langs, args: {
+      "preserve_interword_spaces": "1",
+    });
+    bload = false;
+    print(textEditingController.text);
+    setState(() {});
   }
 
   void scrollListToEND() {
