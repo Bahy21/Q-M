@@ -156,7 +156,9 @@ class _MoreState extends State<More> {
   }
 
   checkIfItAdmin() async {
-    var userId = FirebaseAuth.instance.currentUser!.uid;
+    var uid = await GetDeviceId().deviceId;
+
+    var userId = uid;
     var data =
         await FirebaseFirestore.instance.collection("users").doc(userId).get();
     var parsedData = UserModel.fromJson(data.data()!);

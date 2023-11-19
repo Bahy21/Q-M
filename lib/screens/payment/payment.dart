@@ -13,6 +13,17 @@ class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: InkWell(
+          onTap: () => controller.onSkipPayment(context),
+          child: const Icon(
+            Icons.clear,
+            color: Colors.black,
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(top: 50, right: 15, left: 15).r,
@@ -94,7 +105,7 @@ class _PaymentState extends State<Payment> {
                 ),
                 child: Text(
                   tr("startFreeTrialAndPay", context),
-                  style:  AppTextStyle.s14_w600(color: Colors.white),
+                  style: AppTextStyle.s14_w600(color: Colors.white),
                 ),
               ),
             )

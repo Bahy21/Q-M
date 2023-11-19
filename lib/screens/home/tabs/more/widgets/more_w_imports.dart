@@ -1,6 +1,7 @@
 import 'package:chatgpt_course/constants/constants.dart';
 import 'package:chatgpt_course/core/constants/dimens.dart';
 import 'package:chatgpt_course/core/helpers/di.dart';
+import 'package:chatgpt_course/core/helpers/get_device_id.dart';
 import 'package:chatgpt_course/core/helpers/utilities.dart';
 import 'package:chatgpt_course/core/themes/app_text_style.dart';
 import 'package:chatgpt_course/core/widgets/custom_decoration.dart';

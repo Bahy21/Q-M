@@ -1,7 +1,8 @@
 part of 'home_main_imports.dart';
 
 class HomeMain extends StatefulWidget {
-  const HomeMain({super.key});
+  final String deviceId ;
+  const HomeMain({super.key, required this.deviceId});
 
   @override
   State<HomeMain> createState() => _HomeMainState();
@@ -17,7 +18,8 @@ class _HomeMainState extends State<HomeMain> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -38,11 +40,12 @@ class _HomeMainState extends State<HomeMain> {
                 GenericState<List<dynamic>>>(
               bloc: controller.bannersBloc,
               builder: (context, state) {
-                if(state is GenericUpdateState){
+              if(state is GenericUpdateState){
                   return SizedBox(
                     height: 120.h,
                     child: Swiper(
                       itemBuilder: (BuildContext context, int index) {
+
                         return SizedBox(
                           height: 120.h,
                           child: Swiper(
@@ -92,7 +95,7 @@ class _HomeMainState extends State<HomeMain> {
             FutureBuilder<QuerySnapshot>(
               future: FirebaseFirestore.instance
                   .collection("history")
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .doc( )
                   .collection("history")
                   .get(),
               builder: (context, AsyncSnapshot snapshot) {

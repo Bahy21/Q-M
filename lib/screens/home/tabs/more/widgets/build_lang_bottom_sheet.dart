@@ -16,7 +16,7 @@ class BuildLangBottomSheet extends StatelessWidget {
           InkWell(
             onTap: () async{
               if(FirebaseAuth.instance.currentUser != null){
-                var uid = FirebaseAuth.instance.currentUser!.uid;
+                var uid = await GetDeviceId().deviceId;
                 FirebaseFirestore.instance.collection("users").doc(uid).update({"lang":"en"});
               }
               getIt<Utilities>().changeLanguage("en", context);
@@ -37,9 +37,9 @@ class BuildLangBottomSheet extends StatelessWidget {
             color: Colors.grey.withOpacity(0.2),
           ),
           InkWell(
-            onTap: () {
+            onTap: () async{
               if(FirebaseAuth.instance.currentUser != null){
-                var uid = FirebaseAuth.instance.currentUser!.uid;
+                var uid = await GetDeviceId().deviceId;
                 FirebaseFirestore.instance.collection("users").doc(uid).update({"lang":"ar"});
               }
               getIt<Utilities>().changeLanguage("ar", context);

@@ -3,6 +3,8 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:chatgpt_course/core/helpers/get_device_id.dart';
+import 'package:chatgpt_course/screens/payment/payment_imports.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tesseract_ocr/android_ios.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -35,7 +37,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   bool _isTyping = false;
-  late String question ;
+  late String question;
 
   late TextEditingController textEditingController;
   late ScrollController _listScrollController;
@@ -88,9 +90,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: List.generate(
                     chatProvider.getChatList.length,
                     (index) => ChatWidget(
-                      msg: chatProvider.getChatList[index].msg, // chatList[index].msg,
-                      chatIndex: chatProvider.getChatList[index].chatIndex, //chatList[index].chatIndex,
-                      shouldAnimate: chatProvider.getChatList.length - 1 == index,
+                      msg: chatProvider.getChatList[index].msg,
+                      // chatList[index].msg,
+                      chatIndex: chatProvider.getChatList[index].chatIndex,
+                      //chatList[index].chatIndex,
+                      shouldAnimate:
+                          chatProvider.getChatList.length - 1 == index,
                       listScrollController: _listScrollController,
                     ),
                   ),
@@ -146,8 +151,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        if(await Permission.camera.isGranted)
-                         runFilePiker(ImageSource.camera);
+                        if (await Permission.camera.isGranted)
+                          runFilePiker(ImageSource.camera);
                         else
                           await Permission.camera.request();
                       },
@@ -158,7 +163,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     IconButton(
                       onPressed: () async {
-                          runFilePiker(ImageSource.gallery);
+                        runFilePiker(ImageSource.gallery);
                       },
                       icon: Icon(
                         Icons.camera,
@@ -174,9 +179,11 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
   void runFilePiker(ImageSource) async {
     // android && ios only
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource,requestFullMetadata: true);
+    final pickedFile = await ImagePicker()
+        .pickImage(source: ImageSource, requestFullMetadata: true);
     if (pickedFile != null) {
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
@@ -205,30 +212,30 @@ class _ChatScreenState extends State<ChatScreen> {
       _ocr(croppedFile!.path);
     }
   }
+
   String _ocrText = '';
   var selectList = ["eng", "ara"];
   String path = "";
   bool bload = false;
   void _ocr(url) async {
     path = url;
-    if (kIsWeb == false && (url.indexOf("http://") == 0 || url.indexOf("https://") == 0)) {
+    if (kIsWeb == false &&
+        (url.indexOf("http://") == 0 || url.indexOf("https://") == 0)) {
       Directory tempDir = await getTemporaryDirectory();
       HttpClient httpClient = HttpClient();
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
       HttpClientResponse response = await request.close();
       Uint8List bytes = await consolidateHttpClientResponseBytes(response);
       String dir = tempDir.path;
-      print('$dir/test.jpg');
       File file = File('$dir/test.jpg');
       await file.writeAsBytes(bytes);
       url = file.path;
     }
     var langs = selectList.join("+");
-
     bload = true;
     setState(() {});
-
-    textEditingController.text = await FlutterTesseractOcr.extractText(url, language: langs, args: {
+    textEditingController.text =
+        await FlutterTesseractOcr.extractText(url, language: langs, args: {
       "preserve_interword_spaces": "1",
     });
     bload = false;
@@ -280,21 +287,29 @@ class _ChatScreenState extends State<ChatScreen> {
         textEditingController.clear();
         focusNode.unfocus();
       });
-      var uid =
-          FirebaseAuth.instance.currentUser!.uid;
-      var user = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(uid)
-          .get();
+      var uid = await GetDeviceId().deviceId;
+      var user =
+          await FirebaseFirestore.instance.collection("users").doc(uid).get();
       var parsedUser = UserModel.fromJson(user.data()!);
+      if (parsedUser.paymentType == "none") {
+        if (chatProvider.chatList.length >= 6) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const Payment(),
+            ),
+          );
+          return ;
+        }
+      }
       await chatProvider.sendMessageAndGetAnswers(
         msg: msg,
         chosenModelId: modelsProvider.getCurrentModel,
-        tokens: parsedUser.isPayment == true ? 1000 : 200,
+        tokens: parsedUser.isPayment == true ? 4000 : 200,
       );
+
       await firestore
           .collection("history")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(uid)
           .collection("history")
           .add(
         {"msg": msg.trim()},
@@ -315,5 +330,4 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     }
   }
-
 }

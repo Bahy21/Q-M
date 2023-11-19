@@ -1,7 +1,8 @@
 part of 'home_imports.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String deviceId ;
+  const Home({super.key, required this.deviceId});
 
   @override
   State<Home> createState() => _HomeState();
@@ -33,7 +34,7 @@ class _HomeState extends State<Home> {
           children: const <Widget>[
             More(),
             ChatScreen(),
-            HomeMain(),
+            HomeMain(deviceId: '',),
 
           ],
         ),

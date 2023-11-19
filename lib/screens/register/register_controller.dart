@@ -24,8 +24,7 @@ class RegisterController {
   }
 
   void _setRegister(BuildContext context) async {
-    final credential =
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email.text,
       password: password.text,
     );

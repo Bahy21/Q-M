@@ -62,8 +62,8 @@ class LoginController {
   }
 
   Future<void> handleUserPayment(BuildContext context) async {
-    var user = FirebaseAuth.instance.currentUser;
-    var data = await firestore.collection("users").doc(user!.uid).get();
+    var uid = await GetDeviceId().deviceId;
+    var data = await firestore.collection("users").doc( uid).get();
     var parsedUser = UserModel.fromJson(data.data()!);
     log("data : \n${parsedUser.toJson().toString()}");
     if (parsedUser.isPayment == true) {
@@ -81,7 +81,8 @@ class LoginController {
     }
   }
 
-  void _handleWeekPayment(UserModel user, BuildContext context) {
+  void _handleWeekPayment(UserModel user, BuildContext context) async {
+    var uid = await GetDeviceId().deviceId;
     final DateTime date = user.paymentDate!.toDate();
     if (date.day == now.day - 3 ||
         date.isBefore(
@@ -99,13 +100,15 @@ class LoginController {
     } else {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const Home(),
+          builder: (context) =>  Home(deviceId: uid!,),
         ),
       );
     }
   }
 
-  void _handleMonthPayment(UserModel user, BuildContext context) {
+  void _handleMonthPayment(UserModel user, BuildContext context)async {
+    String ? uid = await GetDeviceId().deviceId;
+
     final DateTime date = user.paymentDate!.toDate();
     if (date.month == now.month - 1 ||
         date.isBefore(
@@ -120,12 +123,13 @@ class LoginController {
       ));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const Home(),
+        builder: (context) =>  Home(deviceId: uid!,),
       ));
     }
   }
 
-  void _handleYearPayment(UserModel user, BuildContext context) {
+  void _handleYearPayment(UserModel user, BuildContext context) async{
+    String ? uid = await GetDeviceId().deviceId;
     final DateTime date = user.paymentDate!.toDate();
     if (date.year == now.year - 1 ||
         date.isBefore(
@@ -140,7 +144,7 @@ class LoginController {
       ));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const Home(),
+        builder: (context) =>  Home(deviceId: uid!,),
       ));
     }
   }

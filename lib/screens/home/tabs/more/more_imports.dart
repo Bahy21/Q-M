@@ -1,3 +1,4 @@
+import 'package:chatgpt_course/core/helpers/get_device_id.dart';
 import 'package:chatgpt_course/core/localization/localization_methods.dart';
 import 'package:chatgpt_course/models/dash_board_model.dart';
 import 'package:chatgpt_course/models/user_model.dart';

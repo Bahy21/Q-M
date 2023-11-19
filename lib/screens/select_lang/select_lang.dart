@@ -20,7 +20,7 @@ class _SelectLangState extends State<SelectLang> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title:  Text(
-          "Select Lang",
+           tr("selectLang", context),
           style: AppTextStyle.s14_w600(
             color: Colors.black,
           ),
@@ -88,10 +88,20 @@ class _SelectLangState extends State<SelectLang> {
               const Spacer(),
               GestureDetector(
                 onTap: () async{
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  var users = prefs.getString("users");
-                  var emails = json.decode(users!);
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  Login(savedEmails: emails,),));
+                  String? deviceId = await GetDeviceId().deviceId;
+                  print(deviceId);
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(deviceId)
+                      .set({
+                    "is_payment": false,
+                    "device_id": await GetDeviceId().deviceId,
+                    "lang": context.read<LangCubit>().state.locale.languageCode,
+                    "questions_count": 0
+                  });
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const Payment(),
+                  ));
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 10.w),
@@ -116,5 +126,20 @@ class _SelectLangState extends State<SelectLang> {
         },
       ),
     );
+  }
+  Future<String?> getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.androidId; // Android ID
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        return iosInfo.identifierForVendor; // iOS identifierForVendor
+      }
+    } catch (e) {
+      print("Error getting device ID: $e");
+      return null;
+    }
   }
 }

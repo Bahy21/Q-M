@@ -13,8 +13,8 @@ class SplashController {
   }
 
   Future<void> handleUserPayment(BuildContext context) async {
-    var user = FirebaseAuth.instance.currentUser;
-    var data = await firestore.collection("users").doc(user!.uid).get();
+    var uid = await GetDeviceId().deviceId;
+    var data = await firestore.collection("users").doc(uid).get();
     var parsedUser = UserModel.fromJson(data.data()!);
     handleUserLang(parsedUser, context);
     if (parsedUser.isPayment == true) {
@@ -38,7 +38,7 @@ class SplashController {
     log("data : \n${user.toJson()}");
     log(FirebaseAuth.instance.currentUser!.uid.toString());
     final DateTime date = user.paymentDate!.toDate();
-    var uid = FirebaseAuth.instance.currentUser!.uid;
+    var uid = await GetDeviceId().deviceId;
     if (date.day == now.day - 3 ||
         date.isBefore(
           DateTime(
@@ -66,14 +66,16 @@ class SplashController {
       );
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Home(),
+        builder: (context) => Home(
+          deviceId: uid!,
+        ),
       ));
     }
   }
 
   void _handleMonthPayment(UserModel user, BuildContext context) async {
     final DateTime date = user.paymentDate!.toDate();
-    var uid = FirebaseAuth.instance.currentUser!.uid;
+    var uid = await GetDeviceId().deviceId;
     if (date.month == now.month - 1 ||
         date.isBefore(
           DateTime(
@@ -91,14 +93,16 @@ class SplashController {
       ));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Home(),
+        builder: (context) => Home(
+          deviceId: uid!,
+        ),
       ));
     }
   }
 
   void _handleYearPayment(UserModel user, BuildContext context) async {
     final DateTime date = user.paymentDate!.toDate();
-    var uid = FirebaseAuth.instance.currentUser!.uid;
+    var uid = await GetDeviceId().deviceId;
     if (date.year == now.year - 1 ||
         date.isBefore(
           DateTime(
@@ -112,25 +116,32 @@ class SplashController {
         "is_payment": false,
       });
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Home(),
+        builder: (context) => Home(
+          deviceId: uid!,
+        ),
       ));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Home(),
+        builder: (context) => Home(
+          deviceId: uid!,
+        ),
       ));
     }
   }
 
   void manipulateSaveData(BuildContext context) async {
-    bool isLogin = FirebaseAuth.instance.currentUser != null;
-    if (isLogin) {
+    var uid = await GetDeviceId().deviceId;
+    bool isLogged = await isLogin();
+    if (isLogged) {
       getApiKey(context);
       handleUserPayment(context);
       Future.delayed(
         Duration(seconds: 1),
         () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => Home(),
+            builder: (BuildContext context) => Home(
+              deviceId: uid!,
+            ),
           ),
         ),
       );
@@ -139,15 +150,28 @@ class SplashController {
       Future.delayed(Duration(seconds: 1), () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => Login(
-              savedEmails: const [],
-            ),
+            builder: (BuildContext context) => SelectLang(),
           ),
         );
       });
     }
   }
 
+  Future<bool> isLogin() async {
+    var users = await FirebaseFirestore.instance.collection("users").get();
+    if (users.docs.isNotEmpty) {
+      var uid = await GetDeviceId().deviceId;
+      return users.docs.any((e) {
+        if (e.id == uid) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    } else {
+      return false;
+    }
+  }
   void handleUserLang(UserModel user, BuildContext context) {
     if (user.lang != null) {
       context.read<LangCubit>().onUpdateLanguage(Locale(user.lang!));

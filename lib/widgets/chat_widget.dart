@@ -3,6 +3,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:chatgpt_course/constants/constants.dart';
 import 'package:chatgpt_course/core/helpers/custom_toast.dart';
+import 'package:chatgpt_course/core/helpers/get_device_id.dart';
 import 'package:chatgpt_course/models/user_model.dart';
 import 'package:chatgpt_course/res.dart';
 import 'package:chatgpt_course/services/assets_manager.dart';
@@ -76,26 +77,32 @@ class ChatWidget extends StatelessWidget {
                                       );
                                     },
                                     onTap: () {
-                                      Clipboard.setData(ClipboardData(text: msg));
+                                      Clipboard.setData(
+                                          ClipboardData(text: msg));
                                     },
                                     isRepeatingAnimation: false,
                                     repeatForever: false,
                                     displayFullTextOnTap: true,
                                     totalRepeatCount: 0,
                                     onFinished: () async {
-                                      var firestore = FirebaseFirestore.instance ;
-                                      var uid = FirebaseAuth.instance.currentUser!.uid;
-                                      var user = await FirebaseFirestore.instance
+                                      var firestore =
+                                          FirebaseFirestore.instance;
+                                      var uid = await GetDeviceId().deviceId;
+                                      var user = await FirebaseFirestore
+                                          .instance
                                           .collection("users")
                                           .doc(uid)
                                           .get();
-                                      await firestore.collection("chatHistory").doc(uid).collection("items").add(
-                                        {
-                                          "questions": chatIndex ,
-                                          "answer":""
-                                        }
-                                      );
-                                      var parsedUser = UserModel.fromJson(user.data()!);
+                                      await firestore
+                                          .collection("chatHistory")
+                                          .doc(uid)
+                                          .collection("items")
+                                          .add({
+                                        "questions": chatIndex,
+                                        "answer": ""
+                                      });
+                                      var parsedUser =
+                                          UserModel.fromJson(user.data()!);
                                       if (parsedUser.isPayment == false) {
                                         // ignore: use_build_context_synchronously
                                         CustomToast.showPaymentDialog(context);
@@ -119,22 +126,39 @@ class ChatWidget extends StatelessWidget {
                               ),
                   ),
                   chatIndex == 0
-                      ? const SizedBox.shrink()
+                      ? InkWell(
+                          onTap: () {
+                            Clipboard.setData(
+                              ClipboardData(
+                                text: msg,
+                              ),
+                            );
+                          },
+                          child: Icon(
+                            Icons.copy,
+                            color: Colors.white,
+                          ),
+                        )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              Icons.thumb_up_alt_outlined,
-                              color: primaryColor,
-                            ),
                             SizedBox(
                               width: 5,
                             ),
-                            Icon(
-                              Icons.thumb_down_alt_outlined,
-                              color: primaryColor,
-                            )
+                            InkWell(
+                              onTap: () {
+                                Clipboard.setData(
+                                  ClipboardData(
+                                    text: msg,
+                                  ),
+                                );
+                              },
+                              child: Icon(
+                                Icons.copy,
+                                color: primaryColor,
+                              ),
+                            ),
                           ],
                         ),
                 ],

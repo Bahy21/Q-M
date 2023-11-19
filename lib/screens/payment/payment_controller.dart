@@ -4,7 +4,7 @@ part of 'payment_imports.dart';
 
 class PaymentController {
   final GenericBloc<PayOptions> payOptionsBloc =
-      GenericBloc(PayOptions.daysFree);
+  GenericBloc(PayOptions.daysFree);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String getPaymentAmount() {
@@ -31,11 +31,33 @@ class PaymentController {
     }
   }
 
+  void onSkipPayment(BuildContext context)async{
+    var uid = await GetDeviceId().deviceId;
+
+    if (payOptionsBloc.state.data == PayOptions.daysFree) {
+      await FirebaseFirestore.instance.collection("users").doc(uid).update(
+        {
+          "payment_date": DateTime.now(),
+          "payment_type": "none",
+          "is_payment": true,
+          "used_free" : true,
+          "questions_count": 0
+        },
+      );
+      var data = await firestore.collection("users").doc(uid).get();
+      var parsedData = UserModel.fromJson(data.data()!);
+      log("data :        \n ${parsedData.toJson()}");
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>  Home(deviceId: uid!,),
+      ));
+      return;
+    }
+  }
 
   void handleDaysFreeSubscription(BuildContext context) async {
-    var user = FirebaseAuth.instance.currentUser;
+    var uid = await GetDeviceId().deviceId;
     if (payOptionsBloc.state.data == PayOptions.daysFree) {
-      await FirebaseFirestore.instance.collection("users").doc(user!.uid).update(
+      await FirebaseFirestore.instance.collection("users").doc(uid).update(
         {
           "payment_date": DateTime.now(),
           "payment_type": "week",
@@ -43,20 +65,20 @@ class PaymentController {
           "used_free" : true
         },
       );
-      var data = await firestore.collection("users").doc(user.uid).get();
+      var data = await firestore.collection("users").doc(uid).get();
       var parsedData = UserModel.fromJson(data.data()!);
       log("data :        \n ${parsedData.toJson()}");
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const Home(),
+        builder: (context) =>  Home(deviceId: uid!,),
       ));
       return;
     }
   }
 
   void onPayment(BuildContext context) async {
-    var user = FirebaseAuth.instance.currentUser;
+    var uid = await GetDeviceId().deviceId;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    var data = await firestore.collection("users").doc(user!.uid).get();
+    var data = await firestore.collection("users").doc(uid).get();
     var parsedUser = UserModel.fromJson(data.data()!);
     if(parsedUser.usedFree == true){
       CustomToast.showSimpleToast(msg: tr("youUsedFreeTrial", context));
@@ -110,17 +132,17 @@ class PaymentController {
               ],
               note: "Contact us for any questions on your order.",
               onSuccess: (Map params) async {
-                User? user = FirebaseAuth.instance.currentUser;
+                String? uid = await GetDeviceId().deviceId;
                 await FirebaseFirestore.instance
                     .collection("users")
-                    .doc(user!.uid)
+                    .doc(uid)
                     .update({
                   "payment_date": DateTime.now(),
                   "payment_type": getPaymentType(),
                   "is_payment": true,
                 });
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const Home(),
+                  builder: (context) =>  Home(deviceId: uid!,),
                 ));
               },
               onError: (error) {
@@ -128,14 +150,14 @@ class PaymentController {
               },
               onCancel: (params) {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const Home(),
+                  builder: (context) =>  Home(deviceId: uid!,),
                 ));
               }),
         ),
       );
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const Home(),
+          builder: (context) =>  Home(deviceId: uid!,),
         ),
       );
     }

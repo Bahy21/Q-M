@@ -11,6 +11,7 @@ class UserModel {
   bool? isAdmin ;
   bool? usedFree;
   String? lang ;
+  int? questionsCount ;
 
   UserModel({
     this.email,
@@ -20,7 +21,8 @@ class UserModel {
     this.isPayment,
     this.isAdmin,
     this.lang,
-    this.usedFree
+    this.usedFree,
+    this.questionsCount
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class UserModel {
     isAdmin = json['is_admin'] != null ? json['is_admin'] : null ;
     lang = json['lang'];
     usedFree = json['used_free'] != null ? json['used_free'] : null ;
+    questionsCount = json['questions_count'] != null ? json['questions_count'] : null ;
   }
 
   Map<String, dynamic> toJson() {
@@ -44,6 +47,7 @@ class UserModel {
     data['is_admin'] = isAdmin;
     data['lang'] = lang;
     data['used_free'] = usedFree;
+    data['questions_count'] = questionsCount;
     return data;
   }
 }
