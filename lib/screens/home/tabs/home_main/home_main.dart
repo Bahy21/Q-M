@@ -95,7 +95,7 @@ class _HomeMainState extends State<HomeMain> {
             FutureBuilder<QuerySnapshot>(
               future: FirebaseFirestore.instance
                   .collection("history")
-                  .doc( )
+                  .doc(widget.deviceId)
                   .collection("history")
                   .get(),
               builder: (context, AsyncSnapshot snapshot) {

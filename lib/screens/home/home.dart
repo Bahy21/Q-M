@@ -31,10 +31,10 @@ class _HomeState extends State<Home> {
         body: PageView(
           reverse: true,
           controller: controller.pageController,
-          children: const <Widget>[
-            More(),
-            ChatScreen(),
-            HomeMain(deviceId: '',),
+          children:  <Widget>[
+            const More(),
+            const ChatScreen(),
+            HomeMain(deviceId:widget.deviceId ,),
 
           ],
         ),

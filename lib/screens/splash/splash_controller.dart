@@ -36,7 +36,6 @@ class SplashController {
 
   void _handleWeekPayment(UserModel user, BuildContext context) async {
     log("data : \n${user.toJson()}");
-    log(FirebaseAuth.instance.currentUser!.uid.toString());
     final DateTime date = user.paymentDate!.toDate();
     var uid = await GetDeviceId().deviceId;
     if (date.day == now.day - 3 ||
