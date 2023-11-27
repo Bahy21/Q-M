@@ -217,6 +217,7 @@ class _ChatScreenState extends State<ChatScreen> {
   var selectList = ["eng", "ara"];
   String path = "";
   bool bload = false;
+
   void _ocr(url) async {
     path = url;
     if (kIsWeb == false &&
@@ -292,13 +293,25 @@ class _ChatScreenState extends State<ChatScreen> {
           await FirebaseFirestore.instance.collection("users").doc(uid).get();
       var parsedUser = UserModel.fromJson(user.data()!);
       if (parsedUser.paymentType == "none") {
-        if (chatProvider.chatList.length >= 6) {
+        if(parsedUser.usedFree==true){
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const Payment(),
             ),
           );
-          return ;
+          return;
+        }
+        if (chatProvider.chatList.length >= 6) {
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(uid)
+              .update({"used_free": true});
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const Payment(),
+            ),
+          );
+          return;
         }
       }
       await chatProvider.sendMessageAndGetAnswers(
@@ -307,11 +320,7 @@ class _ChatScreenState extends State<ChatScreen> {
         tokens: parsedUser.isPayment == true ? 4000 : 200,
       );
 
-      await firestore
-          .collection("history")
-          .doc(uid)
-          .collection("history")
-          .add(
+      await firestore.collection("history").doc(uid).collection("history").add(
         {"msg": msg.trim()},
       );
       setState(() {});

@@ -138,16 +138,6 @@ class _MoreState extends State<More> {
               //     ));
               //   },
               // ),
-              BuildMoreItem(
-                title: tr("logOut", context),
-                icon: Icons.logout_outlined,
-                onTab: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const Splash(),
-                  ));
-                },
-              ),
             ],
           ),
         ),

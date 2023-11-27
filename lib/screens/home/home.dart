@@ -14,7 +14,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     setState(() {});
-    controller.pageController = PageController(initialPage: 2);
+    controller.pageController = PageController(initialPage: 0);
     super.initState();
   }
 
@@ -29,13 +29,11 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       child: Scaffold(
         body: PageView(
-          reverse: true,
           controller: controller.pageController,
           children:  <Widget>[
-            const More(),
-            const ChatScreen(),
             HomeMain(deviceId:widget.deviceId ,),
-
+            const ChatScreen(),
+            const More(),
           ],
         ),
         extendBody: true,
@@ -44,21 +42,21 @@ class _HomeState extends State<Home> {
           color: primaryColor,
           flat: true,
           useActiveColorByDefault: false,
-          items:   [
-            RollingBottomBarItem(
-              Icons.menu,
-              label: tr("menu", context),
-              activeColor: Colors.white,
-            ),
+          items:   [    RollingBottomBarItem(
+            Icons.home,
+            label: tr("home", context),
+            activeColor: Colors.white,
+          ),
+
             const RollingBottomBarItem(
               Icons.chat_bubble_outline,
               label: 'Q & A',
               activeColor: Colors.white,
             ),
 
-             RollingBottomBarItem(
-              Icons.home,
-              label: tr("home", context),
+            RollingBottomBarItem(
+              Icons.menu,
+              label: tr("menu", context),
               activeColor: Colors.white,
             ),
           ],

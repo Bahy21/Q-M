@@ -127,7 +127,7 @@ class _SelectLangState extends State<SelectLang> {
       ),
     );
   }
-  Future<String?> getDeviceId() async {
+/*  Future<String?> getDeviceId() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     try {
       if (Platform.isAndroid) {
@@ -141,5 +141,5 @@ class _SelectLangState extends State<SelectLang> {
       print("Error getting device ID: $e");
       return null;
     }
-  }
+  }*/
 }

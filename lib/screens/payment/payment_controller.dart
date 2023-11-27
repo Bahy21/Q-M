@@ -4,7 +4,7 @@ part of 'payment_imports.dart';
 
 class PaymentController {
   final GenericBloc<PayOptions> payOptionsBloc =
-  GenericBloc(PayOptions.daysFree);
+      GenericBloc(PayOptions.daysFree);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String getPaymentAmount() {
@@ -31,7 +31,7 @@ class PaymentController {
     }
   }
 
-  void onSkipPayment(BuildContext context)async{
+  void onSkipPayment(BuildContext context) async {
     var uid = await GetDeviceId().deviceId;
 
     if (payOptionsBloc.state.data == PayOptions.daysFree) {
@@ -40,7 +40,7 @@ class PaymentController {
           "payment_date": DateTime.now(),
           "payment_type": "none",
           "is_payment": true,
-          "used_free" : true,
+          "used_free": true,
           "questions_count": 0
         },
       );
@@ -48,7 +48,9 @@ class PaymentController {
       var parsedData = UserModel.fromJson(data.data()!);
       log("data :        \n ${parsedData.toJson()}");
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>  Home(deviceId: uid!,),
+        builder: (context) => Home(
+          deviceId: uid!,
+        ),
       ));
       return;
     }
@@ -62,14 +64,16 @@ class PaymentController {
           "payment_date": DateTime.now(),
           "payment_type": "week",
           "is_payment": true,
-          "used_free" : true
+          "used_free": true
         },
       );
       var data = await firestore.collection("users").doc(uid).get();
       var parsedData = UserModel.fromJson(data.data()!);
       log("data :        \n ${parsedData.toJson()}");
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>  Home(deviceId: uid!,),
+        builder: (context) => Home(
+          deviceId: uid!,
+        ),
       ));
       return;
     }
@@ -80,11 +84,16 @@ class PaymentController {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     var data = await firestore.collection("users").doc(uid).get();
     var parsedUser = UserModel.fromJson(data.data()!);
-    if(parsedUser.usedFree == true){
-      CustomToast.showSimpleToast(msg: tr("youUsedFreeTrial", context));
-      return;
+
+/*    if(payOptionsBloc.state.data==PayOptions.daysFree){
+      if(parsedUser.usedFree == true){
+        CustomToast.showSimpleToast(msg: tr("youUsedFreeTrial", context));
+        return;
+      }
     }
+  */
     handleDaysFreeSubscription(context);
+
     if (payOptionsBloc.state.data != PayOptions.daysFree) {
       await Navigator.of(context).push(
         MaterialPageRoute(
@@ -142,7 +151,9 @@ class PaymentController {
                   "is_payment": true,
                 });
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>  Home(deviceId: uid!,),
+                  builder: (context) => Home(
+                    deviceId: uid!,
+                  ),
                 ));
               },
               onError: (error) {
@@ -150,14 +161,18 @@ class PaymentController {
               },
               onCancel: (params) {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>  Home(deviceId: uid!,),
+                  builder: (context) => Home(
+                    deviceId: uid!,
+                  ),
                 ));
               }),
         ),
       );
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) =>  Home(deviceId: uid!,),
+          builder: (context) => Home(
+            deviceId: uid!,
+          ),
         ),
       );
     }

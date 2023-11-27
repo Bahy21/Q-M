@@ -11,7 +11,6 @@ import 'package:chatgpt_course/core/helpers/utilities.dart';
 import 'package:chatgpt_course/core/localization/localization_methods.dart';
 import 'package:chatgpt_course/core/themes/app_text_style.dart';
 import 'package:chatgpt_course/screens/home/home_imports.dart';
-import 'package:device_info/device_info.dart';
 
 import 'package:chatgpt_course/screens/payment/payment_imports.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

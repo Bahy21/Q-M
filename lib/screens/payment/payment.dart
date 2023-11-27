@@ -26,7 +26,7 @@ class _PaymentState extends State<Payment> {
       ),
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.only(top: 50, right: 15, left: 15).r,
+        padding: const EdgeInsets.only(top: 0, right: 15, left: 15).r,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

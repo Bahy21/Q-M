@@ -35,7 +35,7 @@ class RegisterController {
       "is_payment": false,
       "email": email.text,
       "device_id": await GetDeviceId().deviceId,
-      "lang": context.read<LangCubit>().state.locale.languageCode
+      "lang": context.read<LangCubit>().state.locale.languageCode,
     });
     if (credential.user != null) {
       Navigator.of(context).push(
