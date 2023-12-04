@@ -10,13 +10,16 @@ class Ocr extends StatefulWidget {
 }
 
 class _OcrState extends State<Ocr> with WidgetsBindingObserver {
+  final textDetector = TextDetector(
+    options: TextDetectorOptions(
+      languageCode: 'en',
+    ),
+  );
   final OcrController controller = OcrController();
   late final Future<void> _future;
   CameraController? _cameraController;
   bool _isPermissionGranted = false;
-
   final textRecognizer = TextRecognizer();
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -24,7 +27,6 @@ class _OcrState extends State<Ocr> with WidgetsBindingObserver {
     textRecognizer.close();
     super.dispose();
   }
-
   @override
   void initState() {
     super.initState();
@@ -81,13 +83,16 @@ class _OcrState extends State<Ocr> with WidgetsBindingObserver {
                         Expanded(
                           child: Container(),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: primaryColor,
+                        InkWell(
+                          onTap: _scanImage,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: primaryColor,
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
+                            child:  const Text('Scan text', style: AppTextStyle.s12_w400(color: Colors.white)),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
-                          child:  const Text('Scan text', style: AppTextStyle.s12_w400(color: Colors.white)),
                         ),
                       ],
                     )
@@ -148,8 +153,7 @@ class _OcrState extends State<Ocr> with WidgetsBindingObserver {
     _cameraController = CameraController(
       camera,
       ResolutionPreset.ultraHigh,
-      imageFormatGroup:
-          Platform.isAndroid ? ImageFormatGroup.jpeg : ImageFormatGroup.yuv420,
+      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.jpeg : ImageFormatGroup.yuv420,
       enableAudio: false,
     );
     await _cameraController!.initialize();
