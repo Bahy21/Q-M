@@ -10,16 +10,12 @@ class Ocr extends StatefulWidget {
 }
 
 class _OcrState extends State<Ocr> with WidgetsBindingObserver {
-  final textDetector = TextDetector(
-    options: TextDetectorOptions(
-      languageCode: 'en',
-    ),
-  );
+  final textRecognizer = GoogleMlKit.vision.textRecognizer(script:TextRecognitionScript.latin);
   final OcrController controller = OcrController();
   late final Future<void> _future;
   CameraController? _cameraController;
   bool _isPermissionGranted = false;
-  final textRecognizer = TextRecognizer();
+  //final textRecognizer = TextRecognizer();
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
