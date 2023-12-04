@@ -44,8 +44,8 @@ android {
     defaultConfig {
         applicationId "login.bahi.ae"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 33
-        minSdkVersion 19
+        targetSdkVersion 32
+        minSdkVersion 22
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

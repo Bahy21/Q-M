@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:chatgpt_course/core/helpers/get_device_id.dart';
+import 'package:chatgpt_course/screens/ocr/ocr_imports.dart';
 import 'package:chatgpt_course/screens/payment/payment_imports.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tesseract_ocr/android_ios.dart';
@@ -11,7 +12,6 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -29,7 +29,9 @@ import '../../../../widgets/chat_widget.dart';
 import '../../../../widgets/text_widget.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final String? scannedText ;
+  final  String? sourcePath ;
+  const ChatScreen({super.key,  this.scannedText,  this.sourcePath});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -48,6 +50,9 @@ class _ChatScreenState extends State<ChatScreen> {
     _listScrollController = ScrollController();
     textEditingController = TextEditingController();
     focusNode = FocusNode();
+    if (widget.scannedText != null) {
+      textEditingController.text = widget.scannedText!;
+    }
     super.initState();
   }
 
@@ -151,10 +156,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        if (await Permission.camera.isGranted)
-                          runFilePiker(ImageSource.camera);
-                        else
+                        if (await Permission.camera.isGranted){
+                         await Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Ocr(),));
+                          if (widget.sourcePath != null){
+
+                          }
+                        }
+                        else {
                           await Permission.camera.request();
+                        }
                       },
                       icon: Icon(
                         Icons.camera_alt,
@@ -213,7 +223,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  String _ocrText = '';
   var selectList = ["eng", "ara"];
   String path = "";
   bool bload = false;
@@ -235,8 +244,7 @@ class _ChatScreenState extends State<ChatScreen> {
     var langs = selectList.join("+");
     bload = true;
     setState(() {});
-    textEditingController.text =
-        await FlutterTesseractOcr.extractText(url, language: langs, args: {
+    textEditingController.text = await FlutterTesseractOcr.extractText(url, language: langs, args: {
       "preserve_interword_spaces": "1",
     });
     bload = false;
@@ -289,8 +297,7 @@ class _ChatScreenState extends State<ChatScreen> {
         focusNode.unfocus();
       });
       var uid = await GetDeviceId().deviceId;
-      var user =
-          await FirebaseFirestore.instance.collection("users").doc(uid).get();
+      var user = await FirebaseFirestore.instance.collection("users").doc(uid).get();
       var parsedUser = UserModel.fromJson(user.data()!);
       if (parsedUser.paymentType == "none") {
         if(parsedUser.usedFree==true){
@@ -300,6 +307,12 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           );
           return;
+        }
+        if(parsedUser.isPayment==false){
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const Payment(),)
+          );
+          return ;
         }
         if (chatProvider.chatList.length >= 6) {
           await FirebaseFirestore.instance

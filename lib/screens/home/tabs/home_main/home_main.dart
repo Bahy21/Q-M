@@ -45,7 +45,6 @@ class _HomeMainState extends State<HomeMain> {
                     height: 120.h,
                     child: Swiper(
                       itemBuilder: (BuildContext context, int index) {
-
                         return SizedBox(
                           height: 120.h,
                           child: Swiper(
@@ -93,8 +92,7 @@ class _HomeMainState extends State<HomeMain> {
             ),
             Gaps.vGap15,
             FutureBuilder<QuerySnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection("history")
+              future: FirebaseFirestore.instance.collection("history")
                   .doc(widget.deviceId)
                   .collection("history")
                   .get(),
