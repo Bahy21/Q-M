@@ -163,14 +163,11 @@ class _OcrState extends State<Ocr> with WidgetsBindingObserver {
 
   Future<void> _scanImage() async {
     if (_cameraController == null) return;
-
     try {
+
       final pictureFile = await _cameraController!.takePicture();
-
       final file = File(pictureFile.path);
-
       final navigator = Navigator.of(context);
-
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: file.path,
         aspectRatioPresets: [
@@ -198,7 +195,10 @@ class _OcrState extends State<Ocr> with WidgetsBindingObserver {
       final croppedFilePath = File(croppedFile!.path);
       final inputImage = InputImage.fromFile(croppedFilePath);
       final recognizedText = await textRecognizer.processImage(inputImage);
-      print(recognizedText.text);
+      recognizedText.text.replaceAll('÷', '/');
+      if (isMathOperator(recognizedText.text)) {
+         _extractMathOperations(recognizedText.text);
+      }
       await navigator.push(
         MaterialPageRoute(
           builder: (BuildContext context) =>
@@ -212,5 +212,28 @@ class _OcrState extends State<Ocr> with WidgetsBindingObserver {
         ),
       );
     }
+
+  }
+  bool isMathOperator(String text) {
+    final mathOperatorSet = {'+', '-', '*', '/', '√', '^', '÷'};
+    for (String operator in mathOperatorSet) {
+      if (text.contains(operator)) {
+        return true;
+      }
+    }
+    return false ;
+  }
+
+  List<String> _extractMathOperations(String text) {
+    final mathOperators = ['+', '-', '*', '/', '^', '÷'];
+    final operations = <String>[];
+    for (String line in text.split('\n')) {
+      for (String word in line.split(' ')) {
+        if (mathOperators.contains(word) || word.contains(r'\d+')) {
+          operations.add(word);
+        }
+      }
+    }
+    return operations;
   }
 }

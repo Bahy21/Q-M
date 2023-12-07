@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
 import 'dart:developer';
 import 'dart:io';
@@ -50,9 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _listScrollController = ScrollController();
     textEditingController = TextEditingController();
     focusNode = FocusNode();
-    if (widget.scannedText != null) {
-      textEditingController.text = widget.scannedText!;
-    }
+
     super.initState();
   }
 
@@ -157,10 +155,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     IconButton(
                       onPressed: () async {
                         if (await Permission.camera.isGranted){
-                         await Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Ocr(),));
-                          if (widget.sourcePath != null){
-
-                          }
+                         runFilePiker(ImageSource.camera);
                         }
                         else {
                           await Permission.camera.request();
@@ -244,11 +239,11 @@ class _ChatScreenState extends State<ChatScreen> {
     var langs = selectList.join("+");
     bload = true;
     setState(() {});
-    textEditingController.text = await FlutterTesseractOcr.extractText(url, language: langs, args: {
+    textEditingController.text = await FlutterTesseractOcr.extractText(
+        url, language: langs, args: {
       "preserve_interword_spaces": "1",
     });
     bload = false;
-    print(textEditingController.text);
     setState(() {});
   }
 
